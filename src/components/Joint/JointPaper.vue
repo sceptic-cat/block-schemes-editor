@@ -1,14 +1,14 @@
 <template>
-    <div ref="joint"></div>
+    <div id="id_" ref="joint"></div>
 </template>
 
 <script>
     export default {
         name: 'JointPaper',
         props: {
-            id: {
+            id_: {
                 type: String,
-                default: 'paper'
+                default: ""
             },
             width: {
                 type: [String, Number],
@@ -36,24 +36,39 @@
             }
         },
         created() {
-            //this.id = this.id;
             this.name = this.$options.name;
             console.log(`[${this.name}] Created`);
             this.graph = new this.$joint.dia.Graph({ }, { cellNamespace: this.$joint.shapes });
         },
         mounted() {
             console.log(`[${this.name}] Mounted:`, this.$refs.joint);
-            new this.$joint.dia.Paper({
+            let paper = new this.$joint.dia.Paper({
                 el: this.$refs.joint,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.graph,
                 width: this.width,
                 height: this.height,
                 gridSize: this.gridSize,
-                drawGrid: this.drawGrid,
-                background: this.background,
+                drawGrid: {
+                    name: 'mesh',
+                        args: {
+                        color: 'lightgray'
+                    }
+                },
+                background: {
+                    color: 'darkseagreen'
+                },
                 interactive: !this.readonly
             });
+            /*  eslint-disable */
+            paper.on('cell:pointerdown', function(cellView, e, x, y) {
+                console.log('YeeeeeeaaaaaH!!!!');
+            });
+/*
+            this.paper.on('cell:pointerdown', function(cellView, e, x, y) {
+                console.log('YeeeeeeaaaaaH!!!!');
+            });*/
+            /*eslint-enable */
             this.$emit('init', this.graph);
         }
     };
