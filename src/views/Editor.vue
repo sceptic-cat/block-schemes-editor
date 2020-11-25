@@ -14,8 +14,13 @@
 </template>
 
 <script>
-    //import JointPaper from "../components/Joint/JointPaper";
     import $ from 'jquery';  //Ну сорян... пока так...
+    //Импортировать в первую очередь, ибо тут грузятся шаблоны фигур для большинства инструментов
+    import templatesLoader from "../tools/utils/templatesLoader";
+    import Start from "../tools/Start";
+    import HangUp from "../tools/HangUp";
+    import Playback from "../tools/Playback";
+
 
     export default {
         name: "Editor",
@@ -47,6 +52,7 @@
         created() {
             this.graph = new this.$joint.dia.Graph({}, { cellNamespace: this.$joint.shapes });
             this.stenchilGraph = new this.$joint.dia.Graph({}, { cellNamespace: this.$joint.shapes });
+            templatesLoader.load(this.$joint);
         },
         mounted() {
             //console.log(`[${this.name}] Mounted:`, this.$refs.joint);
@@ -71,24 +77,7 @@
                 defaultLink: new this.$joint.dia.Link({
                     attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }}
                 }),
-                validateConnection: (cellViewS, magnetS, cellViewT, magnetT, end, linkView) => {
-                    var links = this.graph.getLinks();
-                    for (var i = 0; i < links.length; i++) {
-                        if(linkView == links[i].findView(this.paper)) //Skip the wire the user is drawing
-                            continue;
-
-                        if ( (( cellViewT.model.id  == links[i].get('source').id ) && ( magnetT.getAttribute('port') == links[i].get('source').port)) ||
-                            (( cellViewT.model.id  == links[i].get('target').id ) && ( magnetT.getAttribute('port') == links[i].get('target').port)) ){
-                            return false;
-                        }
-                    }
-                    // Prevent linking from input ports.
-                    if (magnetS && magnetS.getAttribute('port-group') === 'in') return false;
-                    // Prevent linking from output ports to input ports within one element.
-                    if (cellViewS === cellViewT) return false;
-                    // Prevent linking to input ports.
-                    return magnetT && magnetT.getAttribute('port-group') === 'in';
-                }
+                validateConnection: this.validateConnection
             });
 
             this.stenchil = new this.$joint.dia.Paper({
@@ -105,7 +94,6 @@
                 defaultLink: new this.$joint.dia.Link({
                     attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }}
                 })
-              //  interactive: !this.readonly
             });
 
             this.setupTools(this.stenchilGraph);
@@ -163,59 +151,15 @@
             //Подгружаем инструменты в
             setupTools(graph){
                // console.log('Tools loaded', graph);
-                const rect = new this.$joint.shapes.standard.Rectangle();
-                rect.position(10, 10);
-                rect.resize(100, 40);
-                rect.attr({
-                    body: {
-                        fill: 'blue'
-                    },
-                    label: {
-                        text: 'Hello',
-                        fill: 'white'
-                    }
-                });
-                rect.addTo(graph);
-                const rect2 = rect.clone();
-                rect2.translate(0, 50);
-                rect2.attr('label/text', 'World!');
-                rect2.addTo(graph);
-                const m1 = new this.$joint.shapes.devs.Model({
-                    position: { x: 40, y: 260 },
-                    size: { width: 90, height: 90 },
-                    inPorts: ['in1'],
-                    outPorts: ['out'],
-                    ports: {
-                        groups: {
-                            'in': {
-                                attrs: {
-                                    '.port-body': {
-                                        fill: '#16A085',
-                                        magnet: 'passive'
-                                    }
-                                },
-                                position: {
-                                    args: {
-                                        x: 45,
-                                        y: 0
-                                    }
-                                }
-                            },
-                            'out': {
-                                attrs: {
-                                    '.port-body': {
-                                        fill: '#E74C3C'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    attrs: {
-                        '.label': { text: 'Model', 'ref-x': .5, 'ref-y': .2 },
-                        rect: { fill: '#2ECC71' }
-                    }
-                });
-                m1.addTo(graph);
+                const startBlock = Start.create(this.$joint, 70, 50);
+                const hangUpBlock = HangUp.create(this.$joint, 70, 300);
+                const playbackBlock = Playback.create(this.$joint, 70, 140);
+
+                graph.addCells([
+                    startBlock,
+                    playbackBlock,
+                    hangUpBlock
+                ]);
             },
             validateConnection (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
                 var links = this.graph.getLinks();

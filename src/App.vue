@@ -22,6 +22,10 @@
 </script>
 
 <style>
+body {
+  background-color: #343a40 !important;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

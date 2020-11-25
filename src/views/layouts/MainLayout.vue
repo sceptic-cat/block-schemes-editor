@@ -23,7 +23,7 @@
 </script>
 
 <style scoped>
-.app-content {
-    padding: 20px;
-}
+    .app-content {
+        padding: 5px;
+    }
 </style>
