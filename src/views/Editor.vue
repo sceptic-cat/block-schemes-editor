@@ -1,6 +1,6 @@
 <template>
     <div id="editor">
-        <div class="row">
+        <div id="editor-wrapper" class="row">
             <div class="col-lg-2 col-md-3">
                 <div id="stencil" ref="stencil"></div>
             </div>
@@ -17,9 +17,11 @@
     import $ from 'jquery';  //Ну сорян... пока так...
     //Импортировать в первую очередь, ибо тут грузятся шаблоны фигур для большинства инструментов
     import templatesLoader from "../tools/utils/templatesLoader";
+    import helper from "../tools/utils/helper";
     import Start from "../tools/Start";
     import HangUp from "../tools/HangUp";
     import Playback from "../tools/Playback";
+    import CheckCondition from "../tools/CheckCondition";
 
 
     export default {
@@ -60,11 +62,12 @@
                 el: this.$refs.paper,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.graph,
-                width: window.screen.width - 200,
-                height: window.screen.height - 200,
+                width: 5000,
+                height: 8000,
                 gridSize: 15,
                 markAvailable: true,
                 interactive: true,
+                clickThreshold: 5,
                 drawGrid: {
                     name: 'mesh',
                     args: {
@@ -78,6 +81,26 @@
                     attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }}
                 }),
                 validateConnection: this.validateConnection
+            });
+
+            this.paper.on({
+                'element:mouseenter': (elementView) => {
+                    var model = elementView.model;
+                    //показываем кнопку удаления элемента
+                    elementView.addTools(new this.$joint.dia.ToolsView({
+                        tools: [
+                            new this.$joint.elementTools.Remove({
+                                useModelGeometry: true,
+                                y: '0%',
+                                x: '100%',
+                                offset: helper.getCloseBtnPosition(model.attributes.type)
+                            })
+                        ]
+                    }));
+                },
+                'cell:mouseleave': (cellView) => {
+                    cellView.removeTools();
+                },
             });
 
             this.stenchil = new this.$joint.dia.Paper({
@@ -108,11 +131,13 @@
                         interactive: false
                     });
                 var flyShape = cellView.model.clone(),
+
                     pos = cellView.model.position(),
                     offset = {
                         x: x - pos.x,
                         y: y - pos.y
                     };
+                //flyShape.ports = cellView.model._portElementsCache.clone();
 
                 flyShape.position(0, 0);
                 flyGraph.addCell(flyShape);
@@ -152,12 +177,15 @@
             setupTools(graph){
                // console.log('Tools loaded', graph);
                 const startBlock = Start.create(this.$joint, 70, 50);
-                const hangUpBlock = HangUp.create(this.$joint, 70, 300);
-                const playbackBlock = Playback.create(this.$joint, 70, 140);
+                const playbackBlock = Playback.create(this.$joint, 59, 120);
+                const checkConditionBlock = CheckCondition.create(this.$joint, 35, 210);
+                const hangUpBlock = HangUp.create(this.$joint, 70, 350);
+
 
                 graph.addCells([
                     startBlock,
                     playbackBlock,
+                    checkConditionBlock,
                     hangUpBlock
                 ]);
             },
@@ -184,10 +212,15 @@
 </script>
 
 <style scoped>
+    #editor-wrapper {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     #paper-container {
         overflow: scroll;
-        width: 100%;
-        height: 100%;
+        width: 97%;
+        height: 90vh;
         border: 2px solid #000000;
         background: #6dff7f;
     }
