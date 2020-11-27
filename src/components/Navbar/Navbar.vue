@@ -42,5 +42,7 @@
 </script>
 
 <style scoped>
-
+    .navbar {
+        padding: 0 5px;
+    }
 </style>

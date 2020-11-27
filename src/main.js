@@ -7,6 +7,7 @@ import RappidPlugin from '@/plugins/rappid'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/css/bootstrap.theme.min.css';
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
@@ -20,3 +21,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
