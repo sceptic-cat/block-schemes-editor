@@ -2,6 +2,8 @@
     <div>
         <component v-bind:is="component" />
         <button v-on:click="toggle">Toggle</button>
+        <p>{{tool.id}}</p>
+        <p>{{tool.type}}</p>
     </div>
 </template>
 
@@ -15,6 +17,7 @@
             Playback,
             CheckCondition
         },
+        props: ['tool'],
         data () {
             return {
                 component:"Playback"

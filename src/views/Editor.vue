@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="col-lg-2 col-md-3">
-                <ParamsPanel />
+                <ParamsPanel :tool="currentTool" />
             </div>
         </div>
         <b-button @click="exportJson">Экспорт в лог</b-button>
@@ -34,27 +34,10 @@
         components: {ParamsPanel},
         data() {
             return {
-/*                tools: {
-                    id_: 'tools',
-                    background: {
-                        color: 'darkseagreen'
-                    },
-                    width: 200
-                },
-                schema: {
-                    id_: 'schema',
-                    background: {
-                        color: 'darkseagreen'
-                    },
-                    gridSize: 15,
-                    drawGrid: {
-                        name: 'mesh',
-                        args: {
-                            color: 'lightgray'
-                        }
-                    }
-                },*/
-
+                currentTool: {
+                    id: '',
+                    type: ''
+                }
             };
         },
         created() {
@@ -102,9 +85,11 @@
                 /*'all': function(evt, x, y) {
                     console.log("All events", evt, x, y);
                 },*/
-                'add': function(cell) {
-                    console.log('[ID]',cell.id);
-                    console.log('[TYPE]', cell.attributes.type);
+                'add': (cell) => {
+                    if (cell.attributes.type !== 'link') {
+                        this.currentTool.id = cell.id;
+                        this.currentTool.type = cell.attributes.type;
+                    }
                 }
             });
 
@@ -138,10 +123,10 @@
             //Подгружаем инструменты в
             setupTools(graph){
                // console.log('Tools loaded', graph);
-                const startBlock = Start.create(this.$joint, 70, 50);
-                const playbackBlock = Playback.create(this.$joint, 59, 120);
-                const checkConditionBlock = CheckCondition.create(this.$joint, 35, 210);
-                const hangUpBlock = HangUp.create(this.$joint, 70, 350);
+                const startBlock = Start.create(this.$joint, 50, 50);
+                const playbackBlock = Playback.create(this.$joint, 39, 120);
+                const checkConditionBlock = CheckCondition.create(this.$joint, 15, 210);
+                const hangUpBlock = HangUp.create(this.$joint, 50, 350);
 
                 graph.addCells([
                     startBlock,
@@ -263,6 +248,6 @@
 
     #stencil {
         background: #8bb0ff;
-        width: 300px;
+        width: 160px;
     }
 </style>
