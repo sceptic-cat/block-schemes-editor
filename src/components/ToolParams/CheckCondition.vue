@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Другой компонент</h1>
+        <h1>Check Condition</h1>
     </div>
 </template>
 

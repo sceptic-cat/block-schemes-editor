@@ -58,8 +58,7 @@
             };
         },
         created() {
-            this.graph = new this.$joint.dia.Graph({}, { cellNamespace: this.$joint.shapes });
-            //this.setGraph(this.graph);
+            this.setGraph(new this.$joint.dia.Graph({}, { cellNamespace: this.$joint.shapes }));
             this.stenchilGraph = new this.$joint.dia.Graph({}, { cellNamespace: this.$joint.shapes });
             templatesLoader.load(this.$joint);
         },
@@ -69,7 +68,7 @@
             this.paper = new this.$joint.dia.Paper({
                 el: this.$refs.paper,
                 cellViewNamespace: this.$joint.shapes,
-                model: this.graph,
+                model: this.getGraph(),
                 width: 5000,
                 height: 8000,
                 gridSize: 15,
@@ -94,6 +93,19 @@
             this.paper.on({
                 'element:mouseenter': this.showRemoveBtn,
                 'cell:mouseleave': (cellView) => { cellView.removeTools(); },
+                'cell:pointerclick': this.onBlockClick,
+/*                'all': function(evt, x, y) {
+                    console.log("All events", evt, x, y);
+                }*/
+            });
+            this.getGraph().on({
+                /*'all': function(evt, x, y) {
+                    console.log("All events", evt, x, y);
+                },*/
+                'add': function(cell) {
+                    console.log('[ID]',cell.id);
+                    console.log('[TYPE]', cell.attributes.type);
+                }
             });
 
             //Панель инструментов
@@ -118,7 +130,7 @@
             //Добавляем возможность перетаскивания элементов из панели инструментов на основную схему
             this.stenchil.on('cell:pointerdown', this.dragAndDrop);
 
-           // this.$emit('init', this.graph);
+           // this.$emit('init', this.getGraph());
         },
         methods: {
             ...mapActions(["setGraph"]),
@@ -140,7 +152,7 @@
             },
             //Валидируем связи (стрелочки) между блоками
             validateConnection (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
-                var links = this.graph.getLinks();
+                var links = this.getGraph().getLinks();
                 for (var i = 0; i < links.length; i++) {
                     if(linkView == links[i].findView(this.paper)) //Skip the wire the user is drawing
                         continue;
@@ -198,7 +210,8 @@
                     if (x > target.left && x < target.left + paper.width() && y > target.top && y < target.top + paper.height()) {
                         let s = flyShape.clone();
                         s.position(x - target.left - offset.x, y - target.top - offset.y);
-                        this.graph.addCell(s);
+                        this.getGraph().addCell(s);
+                        s.trigger('cell:pointerclick');
                     }
                     body.off('mousemove.fly').off('mouseup.fly');
                     flyShape.remove();
@@ -219,8 +232,16 @@
                     ]
                 }));
             },
+            onBlockClick(cellView){
+                //var isElement = cellView.model.isElement();
+                //var message = (isElement ? 'Element' : 'Link') + ' removed';
+                console.log('[click]', cellView);
+            },
+            onBlockHighlight(cellView){
+                console.log('[highlight]', cellView);
+            },
             exportJson(){
-                console.log(this.graph.toJSON());
+                console.log(this.getGraph().toJSON());
             }
         }
     }
