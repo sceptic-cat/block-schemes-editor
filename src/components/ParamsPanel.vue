@@ -2,9 +2,9 @@
     <div>
         <div v-if="currentTool">
             <component v-bind:is="currentTool" />
-            <button v-on:click="toggle">Toggle</button>
+<!--            <button v-on:click="toggle">Toggle</button>
             <p>{{tool.id}}</p>
-            <p>{{currentTool}}</p>
+            <p>{{currentTool}}</p>-->
         </div>
         <div v-else>
             <p>Component not loaded</p>
@@ -15,12 +15,14 @@
 <script>
     import Playback from "./ToolParams/Playback";
     import CheckCondition from "./ToolParams/CheckCondition";
+    import Start from "./ToolParams/Start";
 
     export default {
         name: "ParamsPanel",
         components: {
             Playback,
-            CheckCondition
+            CheckCondition,
+            Start
         },
         computed: {
             //Получаем название модуля для подгрузки
