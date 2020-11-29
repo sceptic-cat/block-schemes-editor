@@ -82,13 +82,15 @@
                 }*/
             });
             this.getGraph().on({
-                /*'all': function(evt, x, y) {
+                'all': function(evt, x, y) {
                     console.log("All events", evt, x, y);
-                },*/
+                },
                 'add': (cell) => {
                     if (cell.attributes.type !== 'link') {
-                        this.currentTool.id = cell.id;
-                        this.currentTool.type = cell.attributes.type;
+                        this.currentTool = {
+                            id: cell.id,
+                            type: cell.attributes.type
+                        }
                     }
                 }
             });
@@ -221,6 +223,13 @@
                 //var isElement = cellView.model.isElement();
                 //var message = (isElement ? 'Element' : 'Link') + ' removed';
                 console.log('[click]', cellView);
+                if (cellView.model.attributes.type !== 'link') {
+                    this.currentTool = {
+                        id: cellView.model.id,
+                        type: cellView.model.attributes.type
+                    }
+                }
+
             },
             onBlockHighlight(cellView){
                 console.log('[highlight]', cellView);
