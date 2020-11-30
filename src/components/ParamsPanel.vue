@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="currentTool">
-            <component v-bind:is="currentTool" />
+            <component v-bind:is="currentTool" :id="tool.id" :data="tool.data" />
 <!--            <button v-on:click="toggle">Toggle</button>
             <p>{{tool.id}}</p>
             <p>{{currentTool}}</p>-->

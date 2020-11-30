@@ -27,10 +27,12 @@
 <script>
     export default {
         name: "Playback",
+        props: ['id', 'data'],
         data() {
             return {
-                file: null,
-                option: 'skip',
+                uid: this.id,
+                file: this.data.file,
+                option: this.data.option,
                 options: [
                     { value: 'skip', text: 'skip' },
                     { value: 'noanswer', text: 'noanswer' }

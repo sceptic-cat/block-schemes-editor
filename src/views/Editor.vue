@@ -82,14 +82,15 @@
                 }*/
             });
             this.getGraph().on({
-                'all': function(evt, x, y) {
+/*                'all': function(evt, x, y) {
                     console.log("All events", evt, x, y);
-                },
+                },*/
                 'add': (cell) => {
                     if (cell.attributes.type !== 'link') {
                         this.currentTool = {
                             id: cell.id,
-                            type: cell.attributes.type
+                            type: cell.attributes.type,
+                            data: cell.attributes.data
                         }
                     }
                 }
@@ -220,16 +221,13 @@
                 }));
             },
             onBlockClick(cellView){
-                //var isElement = cellView.model.isElement();
-                //var message = (isElement ? 'Element' : 'Link') + ' removed';
-                console.log('[click]', cellView);
                 if (cellView.model.attributes.type !== 'link') {
                     this.currentTool = {
                         id: cellView.model.id,
-                        type: cellView.model.attributes.type
+                        type: cellView.model.attributes.type,
+                        data: cellView.model.attributes.data
                     }
                 }
-
             },
             onBlockHighlight(cellView){
                 console.log('[highlight]', cellView);

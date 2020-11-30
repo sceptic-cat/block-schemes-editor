@@ -7,6 +7,10 @@ export default {
                     '.label': {
                         text: 'Playback',
                     }
+                },
+                data: {
+                    file: 0,
+                    option: 'skip'
                 }
             }, joint.shapes.devs.RectangleModel.prototype.defaults)
         });

@@ -8,6 +8,9 @@ export default {
                         text: 'Check Condition',
                         'ref-y': 35,
                     }
+                },
+                data: {
+                    condition: ''
                 }
             }, joint.shapes.devs.DiamondModel.prototype.defaults)
         });

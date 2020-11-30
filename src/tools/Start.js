@@ -12,7 +12,6 @@ export default {
                     '.body': {
                         r: 45,
                         cx: 45,
-                       // stroke: 'blue',
                         fill: '#2ECC71'
                     },
                     '.label': {
@@ -20,15 +19,10 @@ export default {
                         'font-size': 15,
                         'ref-y': 2,
                         'y-alignment': 'middle'
-                    }/*,
-                    '.port-body': {
-                        width: 10,
-                        height: 10,
-                        x: -5,
-                        //stroke: 'gray',
-                        fill: '#E74C3C',
-                        magnet: 'active'
-                    }*/
+                    }
+                },
+                data: {
+                    delay: 0
                 }
 
             }, joint.shapes.devs.Model.prototype.defaults)
