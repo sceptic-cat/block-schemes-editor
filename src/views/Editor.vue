@@ -1,15 +1,15 @@
 <template>
     <div id="editor">
-        <div id="editor-wrapper" class="row">
-            <div class="col-lg-2 col-md-2">
+        <div class="container-fluid d-flex h-100">
+            <div class="white h-100 flex-fixed-width-item">
                 <div id="stencil" ref="stencil"></div>
             </div>
-            <div class="col-lg-8 col-md-7">
+            <div class="flex-item-65 blue h-100">
                 <div id="paper-container">
                     <div id="paper" ref="paper"></div>
                 </div>
             </div>
-            <div class="col-lg-2 col-md-3">
+            <div class="flex-item-15 blue h-100">
                 <ParamsPanel :tool="currentTool" />
             </div>
         </div>
@@ -102,7 +102,7 @@
                 el: this.$refs.stencil,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.stenchilGraph,
-                width: 200,
+                width: 160,
                 height: window.screen.height - 200,
                 interactive: false,
                 markAvailable: true,
@@ -178,13 +178,11 @@
                     interactive: false
                 });
                 let flyShape = cellView.model.clone(),
-
                     pos = cellView.model.position(),
                     offset = {
                         x: x - pos.x,
                         y: y - pos.y
                     };
-                //flyShape.ports = cellView.model._portElementsCache.clone();
 
                 flyShape.position(0, 0);
                 flyGraph.addCell(flyShape);
@@ -251,21 +249,32 @@
 </script>
 
 <style scoped>
-    #editor-wrapper {
-        margin-left: 0;
-        margin-right: 0;
+    #editor {
+        padding-top: 5px;
+    }
+
+    .flex-fixed-width-item {
+        flex: 0 0 165px;
+    }
+
+    .flex-item-15 {
+        flex: 1 0 15%;
+    }
+
+    .flex-item-65 {
+        flex: 1 0 65%;
     }
 
     #paper-container {
         overflow: scroll;
-        width: 97%;
+        width: 69vw;
         height: 90vh;
-        border: 2px solid #000000;
+        border: 1px solid #000000;
         background: #6dff7f;
     }
 
     #stencil {
-        background: #8bb0ff;
+        border: 1px solid #000000;
         width: 160px;
     }
 </style>

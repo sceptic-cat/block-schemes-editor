@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="param-panel">
         <div v-if="currentTool">
             <component v-bind:is="currentTool" :id="tool.id" :data="tool.data" />
 <!--            <button v-on:click="toggle">Toggle</button>
@@ -59,5 +59,7 @@
 </script>
 
 <style scoped>
-
+    #param-panel {
+        padding-left: 5px;
+    }
 </style>

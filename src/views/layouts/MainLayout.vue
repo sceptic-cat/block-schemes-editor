@@ -3,10 +3,8 @@
         <nav>
             <Navbar />
         </nav>
-        <main class="app-content container-fluid">
-            <div class="app-page">
-                <router-view />
-            </div>
+        <main class="app-content">
+            <router-view />
         </main>
     </div>
 </template>
@@ -23,7 +21,7 @@
 </script>
 
 <style scoped>
-    .app-content {
+/*    .app-content {
         padding: 5px;
-    }
+    }*/
 </style>
