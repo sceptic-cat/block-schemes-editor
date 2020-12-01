@@ -52,9 +52,9 @@
                 el: this.$refs.paper,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.getGraph(),
-                width: 5000,
+                width: 8000,
                 height: 8000,
-                gridSize: 15,
+                gridSize: 14,
                 markAvailable: true,
                 interactive: true,
                 clickThreshold: 5,
@@ -70,7 +70,8 @@
                 defaultLink: new this.$joint.dia.Link({
                     attrs: { '.marker-target': { d: 'M 10 0 L 0 5 L 10 10 z' }}
                 }),
-                validateConnection: this.validateConnection
+                validateConnection: this.validateConnection,
+                allowLink: this.allowLink
             });
 
             this.paper.on({
@@ -139,17 +140,8 @@
                 ]);
             },
             //Валидируем связи (стрелочки) между блоками
+            /*eslint-disable */
             validateConnection (cellViewS, magnetS, cellViewT, magnetT, end, linkView) {
-                var links = this.getGraph().getLinks();
-                for (var i = 0; i < links.length; i++) {
-                    if(linkView == links[i].findView(this.paper)) //Skip the wire the user is drawing
-                        continue;
-
-                    if ( (( cellViewT.model.id  == links[i].get('source').id ) && ( magnetT.getAttribute('port') == links[i].get('source').port)) ||
-                        (( cellViewT.model.id  == links[i].get('target').id ) && ( magnetT.getAttribute('port') == links[i].get('target').port)) ){
-                        return false;
-                    }
-                }
                 // Prevent linking from input ports.
                 if (magnetS && magnetS.getAttribute('port-group') === 'in') return false;
                 // Prevent linking from output ports to input ports within one element.
@@ -157,6 +149,25 @@
                 // Prevent linking to input ports.
                 return magnetT && magnetT.getAttribute('port-group') === 'in';
             },
+            allowLink (linkView, paper) {
+                const source = linkView.model.attributes.source;
+                //const target = linkView.model.attributes.target;
+                let linkCnt = 0;
+                paper.model.attributes.cells.models.forEach((cell) => {
+                    //Запрещаем делать несколько стрелок из одного out порта
+                    if (cell.attributes.type === 'link' &&
+                        cell.attributes.source.id === source.id &&
+                        cell.attributes.source.port === source.port
+                    ) {
+                        linkCnt++;
+                    }
+                });
+                if (linkCnt > 1) return false;
+                //Запрещаем делать ссылки без цели
+                if (!linkView.targetView) return false;
+                return true;
+            },
+            /*eslint-enable */
             dragAndDrop(cellView, e, x, y) {
                 let body = $('body');
                 body.append('<div id="flyPaper" style="position:fixed;z-index:100;opacity:.6;pointer-event:none; background-color:rgba(0, 0, 0, 0.0);"></div>');

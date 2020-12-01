@@ -7,7 +7,7 @@
         >
             <b-form-input
                     id="check-condition-condition"
-                    v-model="condition"
+                    v-model="form.condition"
                     required
                     placeholder="Условие"
             ></b-form-input>
@@ -27,13 +27,15 @@
 </template>
 
 <script>
+    import baseTool from './mixins/baseTool'
     export default {
         name: "CheckCondition",
-        props: ['id', 'data'],
+        mixins: [ baseTool ],
         data() {
             return {
-                uid: this.id,
-                condition: this.data.condition
+                form: {
+                    condition: this.data.condition
+                }
             }
         }
     }

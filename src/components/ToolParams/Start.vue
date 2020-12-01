@@ -14,37 +14,15 @@
 </template>
 
 <script>
-    import { mapActions } from "vuex";
-    import _ from 'lodash';
-
+    import baseTool from './mixins/baseTool'
     export default {
         name: "Start",
-        props: ['id', 'data'],
+        mixins: [ baseTool ],
         data() {
             return {
-                uid: this.id,
                 form: {
                     delay: this.data.delay
                 }
-
-            }
-        },
-        watch: {
-            form: {
-                /*eslint-disable */
-                handler: _.debounce(function(val, oldVal){
-                    this.saveData();
-                }, 300),
-                deep: true
-            }
-        },
-        methods: {
-            ...mapActions(["updateData"]),
-            saveData() {
-                this.updateData({
-                    id: this.uid,
-                    form: this.form
-                });
             }
         }
     }

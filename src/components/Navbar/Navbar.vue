@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="dark" variant="dark">
-            <b-navbar-brand href="/">NavBar</b-navbar-brand>
+            <b-navbar-brand href="/">Asterisk Dialplan</b-navbar-brand>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -14,12 +14,12 @@
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
 
-                    <b-nav-item-dropdown text="Lang" right>
+                    <!--<b-nav-item-dropdown text="Lang" right>
                         <b-dropdown-item href="#">EN</b-dropdown-item>
                         <b-dropdown-item href="#">ES</b-dropdown-item>
                         <b-dropdown-item href="#">RU</b-dropdown-item>
                         <b-dropdown-item href="#">FA</b-dropdown-item>
-                    </b-nav-item-dropdown>
+                    </b-nav-item-dropdown>-->
 
                     <b-nav-item-dropdown right>
                         <!-- Using 'button-content' slot -->
