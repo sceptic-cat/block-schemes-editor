@@ -7,8 +7,14 @@
 
             <b-collapse id="nav-collapse" is-nav>
                 <b-navbar-nav>
-                    <b-nav-item href="#">Link</b-nav-item>
-                    <b-nav-item href="#" disabled>Disabled</b-nav-item>
+                    <b-nav-item-dropdown>
+                        <!-- Using 'button-content' slot -->
+                        <template #button-content>
+                            <em>Схема</em>
+                        </template>1
+                        <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
+                        <b-dropdown-item href="#">Импорт из json</b-dropdown-item>
+                    </b-nav-item-dropdown>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
@@ -36,8 +42,30 @@
 </template>
 
 <script>
+    import { mapGetters } from "vuex";
     export default {
-        name: "Navbar"
+        name: "Navbar",
+        methods: {
+            ...mapGetters(["getGraph"]),
+            exportToJson(){
+                const json = JSON.stringify( this.getGraph().toJSON() );
+                const file = new Blob([json], {type: 'text/json'});
+                if (window.navigator.msSaveOrOpenBlob) // IE10+
+                    window.navigator.msSaveOrOpenBlob(file, 'asterisk_scheme.json');
+                else { // Others
+                    let a = document.createElement("a"),
+                        url = URL.createObjectURL(file);
+                    a.href = url;
+                    a.download = 'asterisk_scheme.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(function() {
+                        document.body.removeChild(a);
+                        window.URL.revokeObjectURL(url);
+                    }, 0);
+                }
+            }
+        }
     }
 </script>
 
