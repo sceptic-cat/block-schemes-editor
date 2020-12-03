@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Messages />
         <b-navbar toggleable="lg" type="dark" variant="dark">
             <b-navbar-brand href="/">Asterisk Dialplan</b-navbar-brand>
 
@@ -14,6 +15,7 @@
                         </template>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="testA">Тест</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
@@ -48,8 +50,12 @@
 
 <script>
     import { mapGetters } from "vuex";
+    import Messages from "../Modal/Messages";
     export default {
         name: "Navbar",
+        components: {
+            Messages
+        },
         methods: {
             ...mapGetters(["getGraph"]),
             exportToJson(){
@@ -95,8 +101,12 @@
                     });
                 } catch (e) {
                     console.error(e);
+                    this.$bvModal.show('modal-message');
                 }
 
+            },
+            testA() {
+                this.$bvModal.show('modal-message');
             }
         }
     }
