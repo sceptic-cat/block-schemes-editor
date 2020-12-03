@@ -11,9 +11,9 @@
                         <!-- Using 'button-content' slot -->
                         <template #button-content>
                             <em>Схема</em>
-                        </template>1
+                        </template>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
-                        <b-dropdown-item href="#">Импорт из json</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
@@ -38,6 +38,11 @@
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
+        <div style="display: none">
+            <form id="import_form" @submit.prevent="importFromJson">
+                <input id="import_file" type="file" name="import_file" size="chars" accept=".json" @change="importFromJson">
+            </form>
+        </div>
     </div>
 </template>
 
@@ -64,6 +69,34 @@
                         window.URL.revokeObjectURL(url);
                     }, 0);
                 }
+            },
+            getJsonFile(){
+                document.getElementById('import_file').click();
+            },
+            async importFromJson(){
+                let file = document.getElementById('import_file').files[0];
+                let formData = new FormData();
+                formData.append("import_file", file);
+                const url = 'http://localhost/dialplan/web/index.php/editor-api/get-json';
+
+                try {
+                    await fetch(url, {
+                        method: "POST",
+                        body: formData,
+                        //mode: 'no-cors',
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }).then((response) => {
+                        return response.json();
+                    }).then((resp) => {
+                        console.log(resp);
+                        this.getGraph().fromJSON(JSON.parse(resp.data));
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+
             }
         }
     }
