@@ -13,6 +13,7 @@
                         <template #button-content>
                             <em>Схема</em>
                         </template>
+                        <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="testA">Тест</b-dropdown-item>
@@ -49,8 +50,10 @@
 </template>
 
 <script>
-    import { mapGetters } from "vuex";
+    import { mapGetters, mapActions } from "vuex";
     import Messages from "../Modal/Messages";
+    import axios from 'axios';
+
     export default {
         name: "Navbar",
         components: {
@@ -58,6 +61,42 @@
         },
         methods: {
             ...mapGetters(["getGraph"]),
+            ...mapActions(["updateMessages"]),
+            /**
+             * Сохраняем схему на сервере
+             */
+            async save(){
+                const url = this.$localConfig.saveServiceUrl;
+
+                try {
+                    console.log(url);
+                    await axios({
+                        method: "post",
+                        url: url,
+                        withCredentials: true,
+                        data: {
+                            scheme: this.getGraph().toJSON(),
+                        },
+                        transformRequest: [(data) => JSON.stringify(data.data)],
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                        }
+                    }).then((response) => {
+                        console.log(response);
+                    });
+                } catch (e) {
+                    console.error(e);
+                    this.$bvModal.show('modal-message');
+                    this.updateMessages({
+                        title: 'Ошибка',
+                        message: e.name + ": " + e.message
+                    })
+                }
+            },
+            /**
+             * Сохраняем схему в json файл
+             */
             exportToJson(){
                 const json = JSON.stringify( this.getGraph().toJSON() );
                 const file = new Blob([json], {type: 'text/json'});
@@ -76,20 +115,26 @@
                     }, 0);
                 }
             },
+            /**
+             * Эмулируем нажатие кнопки загрузки файла на скрытой форме
+             */
             getJsonFile(){
                 document.getElementById('import_file').click();
             },
+            /**
+             * Импортируем схему из json-файла
+             * @returns {Promise<void>}
+             */
             async importFromJson(){
                 let file = document.getElementById('import_file').files[0];
                 let formData = new FormData();
                 formData.append("import_file", file);
-                const url = 'http://localhost/dialplan/web/index.php/editor-api/get-json';
+                const url = this.$localConfig.importServiceUrl;
 
                 try {
                     await fetch(url, {
                         method: "POST",
                         body: formData,
-                        //mode: 'no-cors',
                         headers: {
                             "Accept": "application/json"
                         }
@@ -102,10 +147,18 @@
                 } catch (e) {
                     console.error(e);
                     this.$bvModal.show('modal-message');
+                    this.updateMessages({
+                        title: 'Ошибка',
+                        message: e.name + ": " + e.message
+                    })
                 }
 
             },
             testA() {
+                this.updateMessages({
+                    title: 'Тестовое сообщение',
+                    message: this.$localConfig.importServiceUrl
+                });
                 this.$bvModal.show('modal-message');
             }
         }
