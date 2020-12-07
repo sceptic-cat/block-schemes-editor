@@ -52,7 +52,6 @@
 <script>
     import { mapGetters, mapActions } from "vuex";
     import Messages from "../Modal/Messages";
-    import axios from 'axios';
 
     export default {
         name: "Navbar",
@@ -69,22 +68,36 @@
                 const url = this.$localConfig.saveServiceUrl;
 
                 try {
-                    console.log(url);
-                    await axios({
-                        method: "post",
-                        url: url,
-                        withCredentials: true,
-                        data: {
-                            scheme: this.getGraph().toJSON(),
-                        },
-                        transformRequest: [(data) => JSON.stringify(data.data)],
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                        }
-                    }).then((response) => {
-                        console.log(response);
-                    });
+
+                    let formData = new FormData();
+                    formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
+                    formData.append("user", "test");
+                    //const url = this.$localConfig.importServiceUrl;
+
+                    try {
+                        await fetch(url, {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                "Accept": "application/json"
+                            }
+                        }).then((response) => {
+                            return response.json();
+                        }).then((resp) => {
+                            this.updateMessages({
+                                title: resp.save ? 'Уведомление' : 'Ошибка',
+                                message: resp.message
+                            });
+                            this.$bvModal.show('modal-message');
+                        });
+                    } catch (e) {
+                        console.error(e);
+                        this.updateMessages({
+                            title: 'Ошибка',
+                            message: e.name + ": " + e.message
+                        });
+                        this.$bvModal.show('modal-message');
+                    }
                 } catch (e) {
                     console.error(e);
                     this.$bvModal.show('modal-message');
