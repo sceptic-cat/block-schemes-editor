@@ -68,20 +68,10 @@
                 const url = this.$localConfig.saveServiceUrl;
 
                 const allElem = this.getGraph().getElements();
-                const allLinks = this.getGraph().getLinks();
                 allElem.forEach(elem => {
-                    console.log('[ELEM]', elem);
-                    /*var textVal = elem.attributes.attrs.text.text;
-                    if(textVal !== undefined && textVal === 'Activity') {
-                        activityElements.push(elem);
-                    }*/
-                });
-                allLinks.forEach(elem => {
-                    console.log('[LINKS]', elem);
-                    /*var textVal = elem.attributes.attrs.text.text;
-                    if(textVal !== undefined && textVal === 'Activity') {
-                        activityElements.push(elem);
-                    }*/
+                    if (elem.attributes.validate && typeof elem.attributes.validate == "function") {
+                        elem.attributes.validate(this.getGraph());
+                    }
                 });
 
                 let formData = new FormData();

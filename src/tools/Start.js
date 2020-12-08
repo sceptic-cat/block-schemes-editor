@@ -24,7 +24,19 @@ export default {
                 data: {
                     delay: 0
                 },
-
+                validate: function(graph) {
+                    const links = graph.getLinks();
+                    let linkFound = false;
+                    links.forEach(elem => {
+                        if (elem.attributes.source.id == this.id && elem.attributes.source.port == "out") {
+                            linkFound = true;
+                        }
+                    });
+                    if (!linkFound) alert('Не указана исходящая ссылка для элемента Start');
+                    return linkFound;
+                    //console.log('pppppppp', this);
+                    //console.log('lnk', links);
+                }
 
             }, joint.shapes.devs.Model.prototype.defaults)
         });
