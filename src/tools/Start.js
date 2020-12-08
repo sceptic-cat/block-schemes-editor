@@ -23,7 +23,8 @@ export default {
                 },
                 data: {
                     delay: 0
-                }
+                },
+
 
             }, joint.shapes.devs.Model.prototype.defaults)
         });
@@ -60,5 +61,8 @@ export default {
             outPorts: ['out']
         });
 
+    },
+    validate(el, graph){
+            console.log('[validate]', el, graph);
     }
 }

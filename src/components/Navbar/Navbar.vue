@@ -67,44 +67,50 @@
             async save(){
                 const url = this.$localConfig.saveServiceUrl;
 
+                const allElem = this.getGraph().getElements();
+                const allLinks = this.getGraph().getLinks();
+                allElem.forEach(elem => {
+                    console.log('[ELEM]', elem);
+                    /*var textVal = elem.attributes.attrs.text.text;
+                    if(textVal !== undefined && textVal === 'Activity') {
+                        activityElements.push(elem);
+                    }*/
+                });
+                allLinks.forEach(elem => {
+                    console.log('[LINKS]', elem);
+                    /*var textVal = elem.attributes.attrs.text.text;
+                    if(textVal !== undefined && textVal === 'Activity') {
+                        activityElements.push(elem);
+                    }*/
+                });
+
+                let formData = new FormData();
+                formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
+                formData.append("user", "test");
+
                 try {
-
-                    let formData = new FormData();
-                    formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
-                    formData.append("user", "test");
-                    //const url = this.$localConfig.importServiceUrl;
-
-                    try {
-                        await fetch(url, {
-                            method: "POST",
-                            body: formData,
-                            headers: {
-                                "Accept": "application/json"
-                            }
-                        }).then((response) => {
-                            return response.json();
-                        }).then((resp) => {
-                            this.updateMessages({
-                                title: resp.save ? 'Уведомление' : 'Ошибка',
-                                message: resp.message
-                            });
-                            this.$bvModal.show('modal-message');
-                        });
-                    } catch (e) {
-                        console.error(e);
+                    await fetch(url, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }).then((response) => {
+                        return response.json();
+                    }).then((resp) => {
                         this.updateMessages({
-                            title: 'Ошибка',
-                            message: e.name + ": " + e.message
+                            title: resp.save ? 'Уведомление' : 'Ошибка',
+                            message: resp.message
                         });
                         this.$bvModal.show('modal-message');
-                    }
+                    });
                 } catch (e) {
                     console.error(e);
-                    this.$bvModal.show('modal-message');
                     this.updateMessages({
                         title: 'Ошибка',
                         message: e.name + ": " + e.message
-                    })
+                    });
+                    this.$bvModal.show('modal-message');
                 }
             },
             /**
