@@ -65,21 +65,39 @@
              * Сохраняем схему на сервере
              */
             async save(){
-                const url = this.$localConfig.saveServiceUrl;
-
+                //Валидируем схему
                 const allElem = this.getGraph().getElements();
-                allElem.forEach(elem => {
+                let isValid = true;
+                let messages = [];
+                allElem.forEach((elem) => {
                     if (elem.attributes.validate && typeof elem.attributes.validate == "function") {
-                        elem.attributes.validate(this.getGraph());
+                        let validation = elem.attributes.validate(this.getGraph());
+                        if (!validation.result) {
+                            isValid = false;
+                            messages = messages.concat(validation.messages);
+                        }
                     }
                 });
+                if (!isValid) {
+                    let message = '<p><b>Схема собрана некорректно. Устраните следующие ошибки: </b></p><ol>';
+                    messages.forEach(function(elem){
+                        message += '<li>' + elem + '</li>';
+                    });
+                    message += '</ol>';
+                    this.updateMessages({
+                        title: 'Ошибка в схеме',
+                        message: message
+                    });
+                    this.$bvModal.show('modal-message');
+                    return false;
+                }
 
                 let formData = new FormData();
                 formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
                 formData.append("user", "test");
 
                 try {
-                    await fetch(url, {
+                    await fetch(this.$localConfig.saveServiceUrl, {
                         method: "POST",
                         body: formData,
                         headers: {

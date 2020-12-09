@@ -1,5 +1,7 @@
+import validation from "./utils/validation";
+
 export default {
-    create(joint, x, y){
+    create(joint){
         joint.shapes.devs.CheckConditionModel = joint.shapes.devs.DiamondModel.extend({
             defaults: joint.util.deepSupplement({
                 type: 'devs.CheckConditionModel',
@@ -11,6 +13,30 @@ export default {
                 },
                 data: {
                     condition: ''
+                },
+                realHeight: 100,
+                validate: function(graph) {
+                    const links = graph.getLinks();
+                    let result = true;
+                    let messages = [];
+                    let linkTrueFound = validation.findLink(links, this.id, "true");
+                    let linkFalseFound = validation.findLink(links, this.id, "false");
+                    if (!linkTrueFound) {
+                        messages.push('Не указана исходящая ссылка для true порта элемента ' + this.attrs['.label'].text);
+                        result = false;
+                    }
+                    if (!linkFalseFound) {
+                        messages.push('Не указана исходящая ссылка для false порта элемента ' + this.attrs['.label'].text);
+                        result = false;
+                    }
+                    if (this.data.condition === '') {
+                        messages.push('Не указано условие для элемента ' + this.attrs['.label'].text);
+                        result = false;
+                    }
+                    return {
+                        result: result,
+                        messages: messages
+                    };
                 }
             }, joint.shapes.devs.DiamondModel.prototype.defaults)
         });
@@ -18,10 +44,10 @@ export default {
         joint.shapes.devs.PlaybackModelView = joint.shapes.devs.DiamondModelView;
 
         let block = new joint.shapes.devs.CheckConditionModel({
-            position: {
+            /*position: {
                 x: x,
                 y: y
-            }
+            }*/
         });
 
 /*        block.addPort({

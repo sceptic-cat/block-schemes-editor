@@ -2,7 +2,9 @@
     <div id="editor">
         <div class="container-fluid d-flex h-100">
             <div class="white h-100 flex-fixed-width-item">
-                <div id="stencil" ref="stencil"></div>
+                <div id="stencil-container">
+                    <div id="stencil" ref="stencil"></div>
+                </div>
             </div>
             <div class="flex-item-65 blue h-100">
                 <div id="paper-container">
@@ -102,8 +104,8 @@
                 el: this.$refs.stencil,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.stenchilGraph,
-                width: 160,
-                height: window.screen.height - 200,
+                width: 141,
+                height: 8000,
                 interactive: false,
                 markAvailable: true,
                 background: {
@@ -127,17 +129,54 @@
             //Подгружаем инструменты в
             setupTools(graph){
                // console.log('Tools loaded', graph);
-                const startBlock = Start.create(this.$joint, 50, 50);
-                const playbackBlock = Playback.create(this.$joint, 39, 120);
-                const checkConditionBlock = CheckCondition.create(this.$joint, 15, 210);
-                const hangUpBlock = HangUp.create(this.$joint, 50, 350);
+/*                const startBlock = Start.create(this.$joint, 40, 50);
+                const playbackBlock = Playback.create(this.$joint, 29, 120);
+                const checkConditionBlock = CheckCondition.create(this.$joint, 5, 210);
+                const hangUpBlock = HangUp.create(this.$joint, 40, 350);*/
 
-                graph.addCells([
-                    startBlock,
-                    playbackBlock,
-                    checkConditionBlock,
-                    hangUpBlock
-                ]);
+                const cells = [
+                    Start.create(this.$joint),
+                    Playback.create(this.$joint/*, 29, 120*/),
+                    Playback.create(this.$joint/*, 29, 120*/),
+                    Playback.create(this.$joint/*, 29, 120*/),
+                    CheckCondition.create(this.$joint/*, 5, 210*/),
+                    CheckCondition.create(this.$joint/*, 5, 210*/),
+                    CheckCondition.create(this.$joint/*, 5, 210*/),
+                    HangUp.create(this.$joint/*, 40, 350*/),
+                    HangUp.create(this.$joint/*, 40, 350*/),
+                    HangUp.create(this.$joint/*, 40, 350*/),
+                ];
+
+                let y = 5;
+                let prev = null;
+                cells.forEach((cell) => {
+                   // console.log(prev);
+                    let prevHeight = prev ? prev.size.height : 30;
+                    let prevOutPortOffset = prev && prev.outPorts.length > 0 ? 15 : 0;
+                    let inPortOffset = cell.attributes.inPorts.length > 0 ? 15 : 0;
+
+                   // if (cell.attributes.type != 'devs.StartModel') {
+                        y = y + prevHeight + prevOutPortOffset + inPortOffset;
+                    //y = y + prevY;
+                        prev = cell.attributes;
+                        //y = y + prevY + Math.ceil(cell.attributes.size.height / 2) + 10; // Math.ceil(cell.attributes.size.height / 2) + 10; //cell.attributes.size.height;
+                        //console.log(cell.attributes.type, 'Y:', y, 'PREV Y:', prevY,  'H: ', cell.attributes.size.height );
+                        //prevY = cell.attributes.size.height;
+                        console.log(cell.attributes.type, y);
+                        cell.position(
+                            5,//160 - cell.attributes.size.width, // + Math.ceil(cell.attributes.size.width / 2),
+                            y
+                         )
+                  //  }
+
+
+
+
+                });
+
+               // console.log('[dddddd]', startBlock);
+
+                graph.addCells(cells);
             },
             //Валидируем связи (стрелочки) между блоками
             /*eslint-disable */
@@ -276,5 +315,11 @@
     #stencil {
         border: 1px solid #000000;
         width: 160px;
+    }
+
+    #stencil-container {
+        overflow-y: scroll;
+        width: 160px;
+        height: 90vh;
     }
 </style>

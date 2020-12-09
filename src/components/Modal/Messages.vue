@@ -1,6 +1,6 @@
 <template>
-    <b-modal id="modal-message" ref="modal-message" :title="title">
-        <p v-if="message">{{ message }}</p>
+    <b-modal class="text-lg-center" id="modal-message" ref="modal-message" :title="title">
+        <p v-if="message" v-html="message"></p>
         <p v-else>Уведомление</p>
         <template #modal-footer>
             <div class="w-100">

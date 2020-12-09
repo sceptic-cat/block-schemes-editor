@@ -1,5 +1,7 @@
 export default {
-    //Прописываем координаты кнопки закрытия для элементов
+    /*
+     *  Прописываем координаты кнопки закрытия для нестандартных элементов
+     */
     getCloseBtnPosition(t){
         const diamond = [
             'devs.CheckConditionModel'

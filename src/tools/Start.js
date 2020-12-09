@@ -1,5 +1,7 @@
+import validation from "./utils/validation";
+
 export default {
-    create(joint, x, y){
+    create(joint/*, x, y*/){
         joint.shapes.devs.StartModel = joint.shapes.devs.Model.extend({
 
             markup: '<g class="rotatable"><g class="scalable"><circle class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
@@ -24,30 +26,27 @@ export default {
                 data: {
                     delay: 0
                 },
+                realHeight: 80,
                 validate: function(graph) {
                     const links = graph.getLinks();
-                    let linkFound = false;
-                    links.forEach(elem => {
-                        if (elem.attributes.source.id == this.id && elem.attributes.source.port == "out") {
-                            linkFound = true;
-                        }
-                    });
-                    if (!linkFound) alert('Не указана исходящая ссылка для элемента Start');
-                    return linkFound;
-                    //console.log('pppppppp', this);
-                    //console.log('lnk', links);
+                    let messages = [];
+                    let linkFound = validation.findLink(links, this.id, "out");
+                    if (!linkFound) messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
+                    return {
+                        result: linkFound,
+                        messages: messages
+                    };
                 }
-
             }, joint.shapes.devs.Model.prototype.defaults)
         });
 
         joint.shapes.devs.StartModelView = joint.shapes.devs.ModelView;
 
         return new joint.shapes.devs.StartModel({
-            position: {
+            /*position: {
                 x: x,
                 y: y
-            },
+            },*/
             size: {
                 width: 60,
                 height: 60
@@ -73,8 +72,5 @@ export default {
             outPorts: ['out']
         });
 
-    },
-    validate(el, graph){
-            console.log('[validate]', el, graph);
     }
 }
