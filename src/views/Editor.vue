@@ -30,6 +30,7 @@
     import HangUp from "../tools/HangUp";
     import Playback from "../tools/Playback";
     import CheckCondition from "../tools/CheckCondition";
+    import TextBlock from "../tools/Text";
 
     export default {
         name: "Editor",
@@ -136,6 +137,7 @@
             //Подгружаем инструменты в
             setupTools(graph){
                 const cells = [
+                    TextBlock.create(this.$joint, 'Группа 1'),
                     Start.create(this.$joint),
                     Playback.create(this.$joint),
                     Playback.create(this.$joint),
@@ -154,11 +156,11 @@
                     // HangUp.create(this.$joint/*, 40, 350*/),
                 ];
 
-                let y = -30; //Поправка на первый элемент
+                let y = 5; //Поправка на первый элемент
                 let prev = null;
                 cells.forEach((cell) => {
-                    let inPortOffset = cell.attributes.inPorts.length > 0 ? 10 : 0;
-                    let prevOutPortOffset = prev && prev.outPorts.length > 0 ? 10 : 0;
+                    let inPortOffset = cell.attributes.inPorts && cell.attributes.inPorts.length > 0 ? 10 : 0;
+                    let prevOutPortOffset = prev && prev.outPorts &&  prev.outPorts.length > 0 ? 10 : 0;
                     let marginTop = 10;
 
                     let offset = cell.attributes.size.height + prevOutPortOffset + inPortOffset + marginTop;
