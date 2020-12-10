@@ -156,6 +156,8 @@
                     // HangUp.create(this.$joint/*, 40, 350*/),
                 ];
 
+                console.log(cells[0]);
+
                 let y = 5; //Поправка на первый элемент
                 let prev = null;
                 cells.forEach((cell) => {
