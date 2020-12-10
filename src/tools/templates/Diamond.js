@@ -7,6 +7,7 @@ export default {
 
             defaults: joint.util.deepSupplement({
                 type: 'devs.DiamondModel',
+                originShape: 'diamond', //кастомное свойство, дабы можно было определить родителя при наследовании
                 attrs: {
                     '.body': {
                         d: 'M 30 0 L 60 30 30 60 0 30 z',
@@ -41,7 +42,7 @@ export default {
                             label: {
                                 position: {
                                     args: {
-                                        y: -10
+                                        y: 0
                                     }
                                 }
                             }

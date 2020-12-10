@@ -1,7 +1,7 @@
 import validation from "./utils/validation";
 
 export default {
-    create(joint){
+    create(joint, x = 0, y = 0){
         joint.shapes.devs.PlaybackModel = joint.shapes.devs.RectangleModel.extend({
             defaults: joint.util.deepSupplement({
                 type: 'devs.PlaybackModel',
@@ -14,7 +14,6 @@ export default {
                     file: '',
                     option: 'skip'
                 },
-                realHeight: 80,
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let result = true;
@@ -39,10 +38,10 @@ export default {
         joint.shapes.devs.PlaybackModelView = joint.shapes.devs.RectangleModelView;
 
         return new joint.shapes.devs.PlaybackModel({
-            /*position: {
+            position: {
                 x: x,
                 y: y
-            }*/
+            }
         });
 
     }

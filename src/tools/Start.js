@@ -1,32 +1,21 @@
 import validation from "./utils/validation";
 
 export default {
-    create(joint/*, x, y*/){
-        joint.shapes.devs.StartModel = joint.shapes.devs.Model.extend({
-
-            markup: '<g class="rotatable"><g class="scalable"><circle class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
-            //portMarkup: '<g class="port"><rect class="port-body"/><text class="port-label"/></g>',
-
+    create(joint, x = 0, y = 0){
+        joint.shapes.devs.StartModel = joint.shapes.devs.CircleModel.extend({
             defaults: joint.util.deepSupplement({
-
                 type: 'devs.StartModel',
                 attrs: {
                     '.body': {
-                        r: 45,
-                        cx: 45,
                         fill: '#2ECC71'
                     },
                     '.label': {
                         text: 'START',
-                        'font-size': 15,
-                        'ref-y': 2,
-                        'y-alignment': 'middle'
                     }
                 },
                 data: {
                     delay: 0
                 },
-                realHeight: 80,
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let messages = [];
@@ -37,19 +26,15 @@ export default {
                         messages: messages
                     };
                 }
-            }, joint.shapes.devs.Model.prototype.defaults)
+            }, joint.shapes.devs.CircleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.StartModelView = joint.shapes.devs.ModelView;
+        joint.shapes.devs.StartModelView = joint.shapes.devs.CircleModelView;
 
         return new joint.shapes.devs.StartModel({
-            /*position: {
+            position: {
                 x: x,
                 y: y
-            },*/
-            size: {
-                width: 60,
-                height: 60
             },
             ports: {
                 groups: {
@@ -64,11 +49,17 @@ export default {
                                 x: 30,
                                 y: 30
                             }
+                        },
+                        label: {
+                            position: {
+                                args: {
+                                    y: 0
+                                }
+                            }
                         }
                     }
                 }
             },
-          //  inPorts: ['in'],
             outPorts: ['out']
         });
 

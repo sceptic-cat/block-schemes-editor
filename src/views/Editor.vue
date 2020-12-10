@@ -108,6 +108,13 @@
                 height: 8000,
                 interactive: false,
                 markAvailable: true,
+                gridSize: 10,
+                drawGrid: {
+                    name: 'mesh',
+                    args: {
+                        color: 'blue'
+                    }
+                },
                 background: {
                     color: 'darkseagreen'
                 },
@@ -128,53 +135,60 @@
             ...mapGetters(["getGraph"]),
             //Подгружаем инструменты в
             setupTools(graph){
-               // console.log('Tools loaded', graph);
-/*                const startBlock = Start.create(this.$joint, 40, 50);
-                const playbackBlock = Playback.create(this.$joint, 29, 120);
-                const checkConditionBlock = CheckCondition.create(this.$joint, 5, 210);
-                const hangUpBlock = HangUp.create(this.$joint, 40, 350);*/
-
                 const cells = [
                     Start.create(this.$joint),
-                    Playback.create(this.$joint/*, 29, 120*/),
-                    Playback.create(this.$joint/*, 29, 120*/),
-                    Playback.create(this.$joint/*, 29, 120*/),
-                    CheckCondition.create(this.$joint/*, 5, 210*/),
-                    CheckCondition.create(this.$joint/*, 5, 210*/),
-                    CheckCondition.create(this.$joint/*, 5, 210*/),
-                    HangUp.create(this.$joint/*, 40, 350*/),
-                    HangUp.create(this.$joint/*, 40, 350*/),
-                    HangUp.create(this.$joint/*, 40, 350*/),
+                    Playback.create(this.$joint),
+                    Playback.create(this.$joint),
+                    CheckCondition.create(this.$joint),
+                    Playback.create(this.$joint),
+                    Start.create(this.$joint),
+                    Playback.create(this.$joint),
+                    CheckCondition.create(this.$joint),
+                    CheckCondition.create(this.$joint),
+                    HangUp.create(this.$joint),
+                    Playback.create(this.$joint),
+                    Start.create(this.$joint),
+                    CheckCondition.create(this.$joint),
+                    HangUp.create(this.$joint),
+                    CheckCondition.create(this.$joint),
+                    // HangUp.create(this.$joint/*, 40, 350*/),
                 ];
 
-                let y = 5;
+                let y = -30; //Поправка на первый элемент
                 let prev = null;
                 cells.forEach((cell) => {
-                   // console.log(prev);
-                    let prevHeight = prev ? prev.size.height : 30;
-                    let prevOutPortOffset = prev && prev.outPorts.length > 0 ? 15 : 0;
-                    let inPortOffset = cell.attributes.inPorts.length > 0 ? 15 : 0;
+                    let inPortOffset = cell.attributes.inPorts.length > 0 ? 10 : 0;
+                    let prevOutPortOffset = prev && prev.outPorts.length > 0 ? 10 : 0;
+                    let marginTop = 10;
 
-                   // if (cell.attributes.type != 'devs.StartModel') {
-                        y = y + prevHeight + prevOutPortOffset + inPortOffset;
-                    //y = y + prevY;
-                        prev = cell.attributes;
-                        //y = y + prevY + Math.ceil(cell.attributes.size.height / 2) + 10; // Math.ceil(cell.attributes.size.height / 2) + 10; //cell.attributes.size.height;
-                        //console.log(cell.attributes.type, 'Y:', y, 'PREV Y:', prevY,  'H: ', cell.attributes.size.height );
-                        //prevY = cell.attributes.size.height;
-                        console.log(cell.attributes.type, y);
-                        cell.position(
-                            5,//160 - cell.attributes.size.width, // + Math.ceil(cell.attributes.size.width / 2),
-                            y
-                         )
-                  //  }
+                    let offset = cell.attributes.size.height + prevOutPortOffset + inPortOffset + marginTop;
+                    y += offset;
 
+                    //console.log(cell.attributes.type, offset, y);
+                    if (prev) {
+                        //TODO:: handle with problem elements and rid from this crutches
+                        //Костыли, потребовавшиеся из-за того, что мы повернули базовые элементы модели
+                        if ( cell.attributes.originShape == 'circle' && prev.originShape != 'circle' ) {
+                            y+= 20;
+                        }
+                        if (prev.originShape == 'circle' && cell.attributes.originShape != 'circle') {
+                            y -= 20;
+                        }
 
+                        if ( cell.attributes.originShape == 'diamond' && prev.originShape != 'diamond' ) {
+                            y-= 20;
+                        }
+                        if (prev.originShape == 'diamond' && cell.attributes.originShape != 'diamond') {
+                            y += 20;
+                        }
+                    }
 
-
+                    prev = cell.attributes;
+                    cell.position(
+                        Math.ceil((this.stenchil.options.width - cell.attributes.size.width) / 2 ),
+                        y
+                     )
                 });
-
-               // console.log('[dddddd]', startBlock);
 
                 graph.addCells(cells);
             },

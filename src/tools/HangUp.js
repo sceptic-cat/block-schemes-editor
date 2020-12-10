@@ -1,27 +1,16 @@
 import validation from "./utils/validation";
 
 export default {
-    create(joint){
-        joint.shapes.devs.HangUpModel = joint.shapes.devs.Model.extend({
-
-            markup: '<g class="rotatable"><g class="scalable"><circle class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
-            //portMarkup: '<g class="port"><rect class="port-body"/><text class="port-label"/></g>',
-
+    create(joint, x = 0, y = 0){
+        joint.shapes.devs.HangUpModel = joint.shapes.devs.CircleModel.extend({
             defaults: joint.util.deepSupplement({
-
                 type: 'devs.HangUpModel',
                 attrs: {
                     '.body': {
-                        r: 45,
-                        cx: 45,
-                        // stroke: 'blue',
                         fill: '#d24335'
                     },
                     '.label': {
                         text: 'Hang Up',
-                        'font-size': 15,
-                        'ref-y': 2,
-                        'y-alignment': 'middle'
                     },
                     '.port-label': {
                         position: {
@@ -29,7 +18,6 @@ export default {
                         }
                     }
                 },
-                realHeight: 80,
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let messages = [];
@@ -41,19 +29,15 @@ export default {
                     };
                 }
 
-            }, joint.shapes.devs.Model.prototype.defaults)
+            }, joint.shapes.devs.CircleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.HangUpModelView = joint.shapes.devs.ModelView;
+        joint.shapes.devs.HangUpModelView = joint.shapes.devs.CircleModelView;
 
         return new joint.shapes.devs.HangUpModel({
-            /*position: {
+            position: {
                 x: x,
                 y: y
-            },*/
-            size: {
-                width: 60,
-                height: 60
             },
             ports: {
                 groups: {
@@ -80,8 +64,7 @@ export default {
                     }
                 }
             },
-            inPorts: ['in'],
-            //outPorts: ['out']
+            inPorts: ['in']
         });
 
     }

@@ -7,6 +7,7 @@ export default {
 
             defaults: joint.util.deepSupplement({
                 type: 'devs.RectangleModel',
+                originShape: 'rectangle', //кастомное свойство, дабы можно было определить родителя при наследовании
                 attrs: {
                     '.body': {
                         fill: '#43914b'
@@ -40,7 +41,7 @@ export default {
                             label: {
                                 position: {
                                     args: {
-                                        y: -10
+                                        y: -6
                                     }
                                 }
                             }
@@ -55,6 +56,13 @@ export default {
                                 args: {
                                     x: 41,
                                     y: 50
+                                }
+                            },
+                            label: {
+                                position: {
+                                    args: {
+                                        y: 6
+                                    }
                                 }
                             }
                         }

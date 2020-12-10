@@ -1,7 +1,7 @@
 import validation from "./utils/validation";
 
 export default {
-    create(joint){
+    create(joint, x = 0, y = 0){
         joint.shapes.devs.CheckConditionModel = joint.shapes.devs.DiamondModel.extend({
             defaults: joint.util.deepSupplement({
                 type: 'devs.CheckConditionModel',
@@ -14,7 +14,6 @@ export default {
                 data: {
                     condition: ''
                 },
-                realHeight: 100,
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let result = true;
@@ -44,10 +43,10 @@ export default {
         joint.shapes.devs.PlaybackModelView = joint.shapes.devs.DiamondModelView;
 
         let block = new joint.shapes.devs.CheckConditionModel({
-            /*position: {
+            position: {
                 x: x,
                 y: y
-            }*/
+            }
         });
 
 /*        block.addPort({
