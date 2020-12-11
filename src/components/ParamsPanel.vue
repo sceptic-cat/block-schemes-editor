@@ -14,15 +14,33 @@
 
 <script>
     import Playback from "./ToolParams/Playback";
+    import PlaySilence from "./ToolParams/PlaySilence";
+    import SayDigits from "./ToolParams/SayDigits";
+    import SayNumber from "./ToolParams/SayNumber";
+    import Background from "./ToolParams/Background";
     import CheckCondition from "./ToolParams/CheckCondition";
     import Start from "./ToolParams/Start";
+    import CountActiveCalls from "./ToolParams/CountActiveCalls";
+    import ExecuteScript from "./ToolParams/ExecuteScript";
+    import GetCurrentTime from "./ToolParams/GetCurrentTime";
+    import GetMonthDay from "./ToolParams/GetMonthDay";
+    import GetWeekDay from "./ToolParams/GetWeekDay";
 
     export default {
         name: "ParamsPanel",
         components: {
+            Background,
             Playback,
             CheckCondition,
-            Start
+            PlaySilence,
+            SayDigits,
+            SayNumber,
+            Start,
+            CountActiveCalls,
+            ExecuteScript,
+            GetCurrentTime,
+            GetMonthDay,
+            GetWeekDay
         },
         computed: {
             //Получаем название модуля для подгрузки
@@ -40,21 +58,7 @@
                 return componentName;
             }
         },
-        props: ['tool'],
-        data () {
-            return {
-                component:"Playback"
-            }
-        },
-        methods: {
-            toggle(){
-                if (this.component === "Playback") {
-                    this.component = CheckCondition;
-                } else {
-                    this.component = Playback;
-                }
-            }
-        }
+        props: ['tool']
     }
 </script>
 

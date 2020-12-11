@@ -20,7 +20,7 @@ export default {
                     }
                 },
                 size: {
-                    width: 80,
+                    width: 100,
                     height: 50
                 },
                 ports: {
@@ -34,7 +34,7 @@ export default {
                             },
                             position: {
                                 args: {
-                                    x: 41,
+                                    x: 50,
                                     y: 0
                                 }
                             },
@@ -54,7 +54,7 @@ export default {
                             },
                             position: {
                                 args: {
-                                    x: 41,
+                                    x: 50,
                                     y: 50
                                 }
                             },

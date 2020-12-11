@@ -9,7 +9,6 @@
             ></b-form-input>
             <b-form-text id="start-delay-help">Время в миллисекундах, между ответом и переходом к выполнению последующих шагов диалплана.</b-form-text>
         </b-form-group>
-        <b-btn @click="saveData">Сохранить</b-btn>
     </div>
 </template>
 

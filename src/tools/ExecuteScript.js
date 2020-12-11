@@ -2,20 +2,16 @@ import validation from "./utils/validation";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.PlaybackModel = joint.shapes.devs.RectangleModel.extend({
+        joint.shapes.devs.ExecuteScriptModel = joint.shapes.devs.RectangleModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.PlaybackModel',
+                type: 'devs.ExecuteScriptModel',
                 attrs: {
                     '.label': {
-                        text: 'Playback',
-                    },
-                    '.body': {
-                        fill: '#748091'
+                        text: 'Execute Script',
                     }
                 },
                 data: {
-                    file: '',
-                    option: 'skip'
+                    script: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
@@ -26,8 +22,8 @@ export default {
                         messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
                         result = false;
                     }
-                    if (this.data.file === '') {
-                        messages.push('Не указан файл для воспроизведения в элементе ' + this.attrs['.label'].text);
+                    if (this.data.script === '') {
+                        messages.push('Отсутствует тело скрипта в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {
@@ -38,9 +34,9 @@ export default {
             }, joint.shapes.devs.RectangleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.PlaybackModelView = joint.shapes.devs.RectangleModelView;
+        joint.shapes.devs.ExecuteScriptModelView = joint.shapes.devs.RectangleModelView;
 
-        return new joint.shapes.devs.PlaybackModel({
+        return new joint.shapes.devs.ExecuteScriptModel({
             position: {
                 x: x,
                 y: y

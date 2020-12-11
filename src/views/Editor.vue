@@ -15,7 +15,6 @@
                 <ParamsPanel :tool="currentTool" />
             </div>
         </div>
-        <b-button @click="exportJson">Экспорт в лог</b-button>
     </div>
 </template>
 
@@ -29,8 +28,17 @@
     import Start from "../tools/Start";
     import HangUp from "../tools/HangUp";
     import Playback from "../tools/Playback";
+    import Background from "../tools/Background";
+    import PlaySilence from "../tools/PlaySilence";
+    import SayNumber from "../tools/SayNumber";
     import CheckCondition from "../tools/CheckCondition";
-    import TextBlock from "../tools/Text";
+    import CountActiveCalls from "../tools/CountActiveCalls";
+    import ExecuteScript from "../tools/ExecuteScript";
+    import GetCurrentTime from "../tools/GetCurrentTime";
+    import GetMonthDay from "../tools/GetMonthDay";
+    import GetWeekDay from "../tools/GetWeekDay";
+    //import TextBlock from "../tools/Text";
+    import GroupLabel from "../tools/GroupLabel";
 
     export default {
         name: "Editor",
@@ -105,17 +113,17 @@
                 el: this.$refs.stencil,
                 cellViewNamespace: this.$joint.shapes,
                 model: this.stenchilGraph,
-                width: 141,
+                width: 150,
                 height: 8000,
                 interactive: false,
                 markAvailable: true,
-                gridSize: 10,
+/*                gridSize: 10,
                 drawGrid: {
                     name: 'mesh',
                     args: {
                         color: 'blue'
                     }
-                },
+                },*/
                 background: {
                     color: 'darkseagreen'
                 },
@@ -137,53 +145,50 @@
             //Подгружаем инструменты в
             setupTools(graph){
                 const cells = [
-                    TextBlock.create(this.$joint, 'Группа 1'),
-                    Start.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Проигрывание \n звуков'),
+                    Background.create(this.$joint),
                     Playback.create(this.$joint),
-                    Playback.create(this.$joint),
-                    CheckCondition.create(this.$joint),
-                    Playback.create(this.$joint),
-                    Start.create(this.$joint),
-                    Playback.create(this.$joint),
-                    CheckCondition.create(this.$joint),
-                    CheckCondition.create(this.$joint),
-                    HangUp.create(this.$joint),
-                    Playback.create(this.$joint),
+                    PlaySilence.create(this.$joint),
+                    SayNumber.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Системные \n функции'),
                     Start.create(this.$joint),
                     CheckCondition.create(this.$joint),
-                    HangUp.create(this.$joint),
-                    CheckCondition.create(this.$joint),
-                    // HangUp.create(this.$joint/*, 40, 350*/),
+                    CountActiveCalls.create(this.$joint),
+                    ExecuteScript.create(this.$joint),
+                    GetCurrentTime.create(this.$joint),
+                    GetMonthDay.create(this.$joint),
+                    GetWeekDay.create(this.$joint),
+                    HangUp.create(this.$joint)
                 ];
 
-                console.log(cells[0]);
-
-                let y = 5; //Поправка на первый элемент
+                let y = 0; //Поправка на первый элемент
                 let prev = null;
-                cells.forEach((cell) => {
-                    let inPortOffset = cell.attributes.inPorts && cell.attributes.inPorts.length > 0 ? 10 : 0;
-                    let prevOutPortOffset = prev && prev.outPorts &&  prev.outPorts.length > 0 ? 10 : 0;
-                    let marginTop = 10;
+                cells.forEach((cell, i) => {
+                    if (i !== 0) {
+                        let inPortOffset = cell.attributes.inPorts && cell.attributes.inPorts.length > 0 ? 10 : 0;
+                        let prevOutPortOffset = prev && prev.outPorts &&  prev.outPorts.length > 0 ? 10 : 0;
+                        let marginTop = 10;
 
-                    let offset = cell.attributes.size.height + prevOutPortOffset + inPortOffset + marginTop;
-                    y += offset;
+                        let offset = cell.attributes.size.height + prevOutPortOffset + inPortOffset + marginTop;
+                        y += offset;
 
-                    //console.log(cell.attributes.type, offset, y);
-                    if (prev) {
-                        //TODO:: handle with problem elements and rid from this crutches
-                        //Костыли, потребовавшиеся из-за того, что мы повернули базовые элементы модели
-                        if ( cell.attributes.originShape == 'circle' && prev.originShape != 'circle' ) {
-                            y+= 20;
-                        }
-                        if (prev.originShape == 'circle' && cell.attributes.originShape != 'circle') {
-                            y -= 20;
-                        }
+                        //console.log(cell.attributes.type, offset, y);
+                        if (prev) {
+                            //TODO:: handle with problem elements and rid from this crutches
+                            //Костыли, потребовавшиеся из-за того, что мы повернули базовые элементы модели
+                            if ( cell.attributes.originShape == 'circle' && prev.originShape != 'circle' ) {
+                                y+= prevOutPortOffset * 2;
+                            }
+                            if (prev.originShape == 'circle' && cell.attributes.originShape != 'circle') {
+                                y -= 20;
+                            }
 
-                        if ( cell.attributes.originShape == 'diamond' && prev.originShape != 'diamond' ) {
-                            y-= 20;
-                        }
-                        if (prev.originShape == 'diamond' && cell.attributes.originShape != 'diamond') {
-                            y += 20;
+                            if ( cell.attributes.originShape == 'diamond' && prev.originShape != 'diamond' ) {
+                                y -= 20;
+                            }
+                            if (prev.originShape == 'diamond' && cell.attributes.originShape != 'diamond') {
+                                y += prevOutPortOffset * 2;
+                            }
                         }
                     }
 
@@ -297,9 +302,6 @@
             },
             onBlockHighlight(cellView){
                 console.log('[highlight]', cellView);
-            },
-            exportJson(){
-                console.log(this.getGraph().toJSON());
             }
         }
     }
@@ -339,5 +341,26 @@
         overflow-y: scroll;
         width: 160px;
         height: 90vh;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 </style>

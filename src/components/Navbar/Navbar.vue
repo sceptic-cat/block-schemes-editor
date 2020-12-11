@@ -16,7 +16,7 @@
                         <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
-                        <b-dropdown-item href="#" @click="testA">Тест</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
@@ -181,12 +181,8 @@
                 }
 
             },
-            testA() {
-                this.updateMessages({
-                    title: 'Тестовое сообщение',
-                    message: this.$localConfig.importServiceUrl
-                });
-                this.$bvModal.show('modal-message');
+            exportToLog(){
+                console.log(this.getGraph().toJSON());
             }
         }
     }

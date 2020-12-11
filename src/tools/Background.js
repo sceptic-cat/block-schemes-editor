@@ -2,12 +2,12 @@ import validation from "./utils/validation";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.PlaybackModel = joint.shapes.devs.RectangleModel.extend({
+        joint.shapes.devs.BackgroundModel = joint.shapes.devs.RectangleModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.PlaybackModel',
+                type: 'devs.BackgroundModel',
                 attrs: {
                     '.label': {
-                        text: 'Playback',
+                        text: 'Background',
                     },
                     '.body': {
                         fill: '#748091'
@@ -38,9 +38,9 @@ export default {
             }, joint.shapes.devs.RectangleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.PlaybackModelView = joint.shapes.devs.RectangleModelView;
+        joint.shapes.devs.BackgroundModelView = joint.shapes.devs.RectangleModelView;
 
-        return new joint.shapes.devs.PlaybackModel({
+        return new joint.shapes.devs.BackgroundModel({
             position: {
                 x: x,
                 y: y

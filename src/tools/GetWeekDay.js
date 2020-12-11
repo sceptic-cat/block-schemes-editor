@@ -2,21 +2,15 @@ import validation from "./utils/validation";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.PlaybackModel = joint.shapes.devs.RectangleModel.extend({
+        joint.shapes.devs.GetWeekDayModel = joint.shapes.devs.RectangleModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.PlaybackModel',
+                type: 'devs.GetWeekDayModel',
                 attrs: {
                     '.label': {
-                        text: 'Playback',
-                    },
-                    '.body': {
-                        fill: '#748091'
+                        text: 'Get Week Day',
                     }
                 },
-                data: {
-                    file: '',
-                    option: 'skip'
-                },
+                data: {},
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let result = true;
@@ -24,10 +18,6 @@ export default {
                     let linkFound = validation.findLink(links, this.id, "out");
                     if (!linkFound) {
                         messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
-                        result = false;
-                    }
-                    if (this.data.file === '') {
-                        messages.push('Не указан файл для воспроизведения в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {
@@ -38,9 +28,9 @@ export default {
             }, joint.shapes.devs.RectangleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.PlaybackModelView = joint.shapes.devs.RectangleModelView;
+        joint.shapes.devs.GetWeekDayModelView = joint.shapes.devs.RectangleModelView;
 
-        return new joint.shapes.devs.PlaybackModel({
+        return new joint.shapes.devs.GetWeekDayModel({
             position: {
                 x: x,
                 y: y

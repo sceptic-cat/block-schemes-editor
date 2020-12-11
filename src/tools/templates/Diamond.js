@@ -21,7 +21,7 @@ export default {
                     }
                 },
                 size: {
-                    width: 130,
+                    width: 140,
                     height: 70
                 },
                 ports: {
@@ -35,7 +35,7 @@ export default {
                             },
                             position: {
                                 args: {
-                                    x: 65,
+                                    x: 70,
                                     y: 0
                                 }
                             },
@@ -63,7 +63,7 @@ export default {
                             label: {
                                 position: {
                                     args: {
-                                        x: 15,
+                                        x: 12,
                                         y: 4
                                     }
                                 }
