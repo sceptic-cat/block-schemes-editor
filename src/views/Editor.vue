@@ -37,6 +37,7 @@
     import GetCurrentTime from "../tools/GetCurrentTime";
     import GetMonthDay from "../tools/GetMonthDay";
     import GetWeekDay from "../tools/GetWeekDay";
+    import IsTimeBetween from "../tools/IsTimeBetween";
     //import TextBlock from "../tools/Text";
     import GroupLabel from "../tools/GroupLabel";
 
@@ -158,6 +159,7 @@
                     GetCurrentTime.create(this.$joint),
                     GetMonthDay.create(this.$joint),
                     GetWeekDay.create(this.$joint),
+                    IsTimeBetween.create(this.$joint),
                     HangUp.create(this.$joint)
                 ];
 

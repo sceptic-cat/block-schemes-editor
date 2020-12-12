@@ -25,6 +25,7 @@
     import GetCurrentTime from "./ToolParams/GetCurrentTime";
     import GetMonthDay from "./ToolParams/GetMonthDay";
     import GetWeekDay from "./ToolParams/GetWeekDay";
+    import IsTimeBetween from "./ToolParams/IsTimeBetween";
 
     export default {
         name: "ParamsPanel",
@@ -40,7 +41,8 @@
             ExecuteScript,
             GetCurrentTime,
             GetMonthDay,
-            GetWeekDay
+            GetWeekDay,
+            IsTimeBetween,
         },
         computed: {
             //Получаем название модуля для подгрузки
