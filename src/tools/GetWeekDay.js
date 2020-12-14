@@ -1,3 +1,4 @@
+import config from "@/config";
 import validation from "./utils/validation";
 
 export default {
@@ -8,6 +9,9 @@ export default {
                 attrs: {
                     '.label': {
                         text: 'Get Week Day',
+                    },
+                    '.body': {
+                        fill: config.colours.blocks.datetime
                     }
                 },
                 data: {},

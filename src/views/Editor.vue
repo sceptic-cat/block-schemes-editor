@@ -38,6 +38,11 @@
     import GetMonthDay from "../tools/GetMonthDay";
     import GetWeekDay from "../tools/GetWeekDay";
     import IsTimeBetween from "../tools/IsTimeBetween";
+    import IsTodayHoliday from "../tools/IsTodayHoliday";
+    import SetTimeout from "../tools/SetTimeout";
+    import SetVariableValue from "../tools/SetVariableValue";
+    import VerifyRegularExpression from "../tools/VerifyRegularExpression";
+    import CheckBlackList from "../tools/CheckBlackList";
     //import TextBlock from "../tools/Text";
     import GroupLabel from "../tools/GroupLabel";
 
@@ -146,6 +151,12 @@
             //Подгружаем инструменты в
             setupTools(graph){
                 const cells = [
+                    GroupLabel.create(this.$joint, 'Дата и время'),
+                    GetCurrentTime.create(this.$joint),
+                    GetMonthDay.create(this.$joint),
+                    GetWeekDay.create(this.$joint),
+                    IsTimeBetween.create(this.$joint),
+                    IsTodayHoliday.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Проигрывание \n звуков'),
                     Background.create(this.$joint),
                     Playback.create(this.$joint),
@@ -156,10 +167,10 @@
                     CheckCondition.create(this.$joint),
                     CountActiveCalls.create(this.$joint),
                     ExecuteScript.create(this.$joint),
-                    GetCurrentTime.create(this.$joint),
-                    GetMonthDay.create(this.$joint),
-                    GetWeekDay.create(this.$joint),
-                    IsTimeBetween.create(this.$joint),
+                    SetTimeout.create(this.$joint),
+                    SetVariableValue.create(this.$joint),
+                    VerifyRegularExpression.create(this.$joint),
+                    CheckBlackList.create(this.$joint),
                     HangUp.create(this.$joint)
                 ];
 
@@ -190,6 +201,16 @@
                             }
                             if (prev.originShape == 'diamond' && cell.attributes.originShape != 'diamond') {
                                 y += prevOutPortOffset * 2;
+                            }
+
+                            if (cell.attributes.originShape == 'groupLabel' && (prev.originShape != 'circle')) {
+                                y += marginTop;
+                            }
+                            if (cell.attributes.originShape == 'circle' && prev.originShape == 'groupLabel') {
+                                y += marginTop;
+                            }
+                            if (cell.attributes.originShape != 'circle' && prev.originShape == 'groupLabel') {
+                                y -= marginTop;
                             }
                         }
                     }

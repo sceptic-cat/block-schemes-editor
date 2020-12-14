@@ -1,23 +1,19 @@
-import config from "@/config";
 import validation from "./utils/validation";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.IsTimeBetweenModel = joint.shapes.devs.DiamondModel.extend({
+        joint.shapes.devs.IsTodayHolidayModel = joint.shapes.devs.DiamondModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.IsTimeBetweenModel',
+                type: 'devs.IsTodayHolidayModel',
                 attrs: {
                     '.label': {
-                        text: 'Is Time \n Between',
+                        text: 'Is Today \n Holiday',
                         'ref-y': 35,
                     },
                     '.body': {
                         fill: config.colours.blocks.datetime
                     }
-                },
-                data: {
-                    begin: '',
-                    end: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
@@ -33,14 +29,6 @@ export default {
                         messages.push('Не указана исходящая ссылка для false порта элемента ' + this.attrs['.label'].text);
                         result = false;
                     }
-                    if (this.data.begin === '') {
-                        messages.push('Не указаны дата и время начала в элементе ' + this.attrs['.label'].text);
-                        result = false;
-                    }
-                    if (this.data.end === '') {
-                        messages.push('Не указаны дата и время конца в элементе ' + this.attrs['.label'].text);
-                        result = false;
-                    }
                     return {
                         result: result,
                         messages: messages
@@ -49,9 +37,9 @@ export default {
             }, joint.shapes.devs.DiamondModel.prototype.defaults)
         });
 
-        joint.shapes.devs.IsTimeBetweenModelView = joint.shapes.devs.DiamondModelView;
+        joint.shapes.devs.IsTodayHolidayModelView = joint.shapes.devs.DiamondModelView;
 
-        let block = new joint.shapes.devs.IsTimeBetweenModel({
+        let block = new joint.shapes.devs.IsTodayHolidayModel({
             position: {
                 x: x,
                 y: y

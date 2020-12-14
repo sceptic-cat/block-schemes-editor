@@ -40,7 +40,7 @@ export default {
             }, joint.shapes.devs.DiamondModel.prototype.defaults)
         });
 
-        joint.shapes.devs.PlaybackModelView = joint.shapes.devs.DiamondModelView;
+        joint.shapes.devs.CheckConditionModelView = joint.shapes.devs.DiamondModelView;
 
         let block = new joint.shapes.devs.CheckConditionModel({
             position: {
@@ -48,38 +48,6 @@ export default {
                 y: y
             }
         });
-
-/*        block.addPort({
-          //  id: 'truePort',
-            group: 'out',
-            attrs: {
-                text: {
-                    text: 'true'
-                }
-            },
-        });
-
-        block.addPort({
-           // id: 'falsePort',
-            group: 'out',
-            args: { y: 34, x: 130 },
-            attrs: {
-                '.port-body': {
-                    fill: '#E74C3C'
-                },
-                text: {
-                    text: 'false'
-                }
-            },
-            label: {
-                position: {
-                    args: {
-                        x: -8,
-                        y: -20
-                    }
-                }
-            }
-        });*/
 
         return block;
     }

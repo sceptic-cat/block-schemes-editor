@@ -1,3 +1,5 @@
+import config from "@/config";
+
 export default {
     load(joint){
         joint.shapes.devs.RectangleModel = joint.shapes.devs.Model.extend({
@@ -10,7 +12,7 @@ export default {
                 originShape: 'rectangle', //кастомное свойство, дабы можно было определить родителя при наследовании
                 attrs: {
                     '.body': {
-                        fill: '#43914b'
+                        fill: config.colours.blocks.default
                     },
                     '.label': {
                         text: 'Rectangle',

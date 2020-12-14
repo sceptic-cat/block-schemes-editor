@@ -1,4 +1,5 @@
 import validation from "./utils/validation";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
@@ -10,7 +11,7 @@ export default {
                         text: 'Background',
                     },
                     '.body': {
-                        fill: '#748091'
+                        fill: config.colours.blocks.sounds
                     }
                 },
                 data: {

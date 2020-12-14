@@ -26,6 +26,9 @@
     import GetMonthDay from "./ToolParams/GetMonthDay";
     import GetWeekDay from "./ToolParams/GetWeekDay";
     import IsTimeBetween from "./ToolParams/IsTimeBetween";
+    import SetTimeout from "./ToolParams/SetTimeout";
+    import SetVariableValue from "./ToolParams/SetVariableValue";
+    import VerifyRegularExpression from "./ToolParams/VerifyRegularExpression";
 
     export default {
         name: "ParamsPanel",
@@ -43,6 +46,9 @@
             GetMonthDay,
             GetWeekDay,
             IsTimeBetween,
+            SetTimeout,
+            SetVariableValue,
+            VerifyRegularExpression
         },
         computed: {
             //Получаем название модуля для подгрузки

@@ -1,3 +1,5 @@
+import config from "@/config";
+
 export default {
     load(joint){
         joint.shapes.devs.DiamondModel = joint.shapes.devs.Model.extend({
@@ -11,7 +13,7 @@ export default {
                 attrs: {
                     '.body': {
                         d: 'M 30 0 L 60 30 30 60 0 30 z',
-                        fill: '#43914b'
+                        fill: config.colours.blocks.default
                     },
                     '.label': {
                         text: 'Diamond',
@@ -63,8 +65,8 @@ export default {
                             label: {
                                 position: {
                                     args: {
-                                        x: 12,
-                                        y: 4
+                                        x: -15,
+                                        y: 14
                                     }
                                 }
                             }

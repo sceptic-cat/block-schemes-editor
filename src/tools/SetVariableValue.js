@@ -1,21 +1,18 @@
 import validation from "./utils/validation";
-import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.PlaySilenceModel = joint.shapes.devs.RectangleModel.extend({
+        joint.shapes.devs.SetVariableValueModel = joint.shapes.devs.RectangleModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.PlaySilenceModel',
+                type: 'devs.SetVariableValueModel',
                 attrs: {
                     '.label': {
-                        text: 'Play Silence',
-                    },
-                    '.body': {
-                        fill: config.colours.blocks.sounds
-                    },
+                        text: 'Set Variable \n Value',
+                    }
                 },
                 data: {
-                    duration: 0
+                    name: '',
+                    value: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
@@ -26,8 +23,8 @@ export default {
                         messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
                         result = false;
                     }
-                    if (this.data.duration === '') {
-                        messages.push('Не указана длительность ожидания в элементе ' + this.attrs['.label'].text);
+                    if (this.data.name === '') {
+                        messages.push('Не указано имя переменной в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {
@@ -38,9 +35,9 @@ export default {
             }, joint.shapes.devs.RectangleModel.prototype.defaults)
         });
 
-        joint.shapes.devs.PlaySilenceModelView = joint.shapes.devs.RectangleModelView;
+        joint.shapes.devs.SetVariableValueModelView = joint.shapes.devs.RectangleModelView;
 
-        return new joint.shapes.devs.PlaySilenceModel({
+        return new joint.shapes.devs.SetVariableValueModel({
             position: {
                 x: x,
                 y: y

@@ -1,23 +1,18 @@
-import config from "@/config";
 import validation from "./utils/validation";
 
 export default {
     create(joint, x = 0, y = 0){
-        joint.shapes.devs.IsTimeBetweenModel = joint.shapes.devs.DiamondModel.extend({
+        joint.shapes.devs.VerifyRegularExpressionModel = joint.shapes.devs.DiamondModel.extend({
             defaults: joint.util.deepSupplement({
-                type: 'devs.IsTimeBetweenModel',
+                type: 'devs.VerifyRegularExpressionModel',
                 attrs: {
                     '.label': {
-                        text: 'Is Time \n Between',
+                        text: 'Verify Regular \n Expression',
                         'ref-y': 35,
-                    },
-                    '.body': {
-                        fill: config.colours.blocks.datetime
                     }
                 },
                 data: {
-                    begin: '',
-                    end: ''
+                    expression: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
@@ -33,12 +28,8 @@ export default {
                         messages.push('Не указана исходящая ссылка для false порта элемента ' + this.attrs['.label'].text);
                         result = false;
                     }
-                    if (this.data.begin === '') {
-                        messages.push('Не указаны дата и время начала в элементе ' + this.attrs['.label'].text);
-                        result = false;
-                    }
-                    if (this.data.end === '') {
-                        messages.push('Не указаны дата и время конца в элементе ' + this.attrs['.label'].text);
+                    if (this.data.expression === '') {
+                        messages.push('Не указано имя переменной в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {
@@ -49,9 +40,9 @@ export default {
             }, joint.shapes.devs.DiamondModel.prototype.defaults)
         });
 
-        joint.shapes.devs.IsTimeBetweenModelView = joint.shapes.devs.DiamondModelView;
+        joint.shapes.devs.VerifyRegularExpressionModelView = joint.shapes.devs.DiamondModelView;
 
-        let block = new joint.shapes.devs.IsTimeBetweenModel({
+        let block = new joint.shapes.devs.VerifyRegularExpressionModel({
             position: {
                 x: x,
                 y: y
