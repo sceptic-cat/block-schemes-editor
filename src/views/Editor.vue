@@ -43,6 +43,12 @@
     import SetVariableValue from "../tools/SetVariableValue";
     import VerifyRegularExpression from "../tools/VerifyRegularExpression";
     import CheckBlackList from "../tools/CheckBlackList";
+    import GetQueueTime from "../tools/GetQueueTime";
+    import Queue from "../tools/Queue";
+    import SetCallPriority from "../tools/SetCallPriority";
+    import SetCallParameter from "../tools/SetCallParameter";
+    import ExternalTransfer from "../tools/ExternalTransfer";
+    import Transfer from "../tools/Transfer";
     //import TextBlock from "../tools/Text";
     import GroupLabel from "../tools/GroupLabel";
 
@@ -157,6 +163,15 @@
                     GetWeekDay.create(this.$joint),
                     IsTimeBetween.create(this.$joint),
                     IsTodayHoliday.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Очереди \n вызовов'),
+                    GetQueueTime.create(this.$joint),
+                    Queue.create(this.$joint),
+                    SetCallPriority.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Параметры \n вызовов'),
+                    SetCallParameter.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Перенаправления'),
+                    ExternalTransfer.create(this.$joint),
+                    Transfer.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Проигрывание \n звуков'),
                     Background.create(this.$joint),
                     Playback.create(this.$joint),
@@ -170,10 +185,15 @@
                     SetTimeout.create(this.$joint),
                     SetVariableValue.create(this.$joint),
                     VerifyRegularExpression.create(this.$joint),
+                    HangUp.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Дополнительные \n блоки'),
                     CheckBlackList.create(this.$joint),
-                    HangUp.create(this.$joint)
                 ];
 
+                this.calcPositions(cells);
+                graph.addCells(cells);
+            },
+            calcPositions(cells) {
                 let y = 0; //Поправка на первый элемент
                 let prev = null;
                 cells.forEach((cell, i) => {
@@ -219,10 +239,8 @@
                     cell.position(
                         Math.ceil((this.stenchil.options.width - cell.attributes.size.width) / 2 ),
                         y
-                     )
+                    )
                 });
-
-                graph.addCells(cells);
             },
             //Валидируем связи (стрелочки) между блоками
             /*eslint-disable */
@@ -309,7 +327,7 @@
                             useModelGeometry: true,
                             y: '0%',
                             x: '100%',
-                            offset: helper.getCloseBtnPosition(model.attributes.type)
+                            offset: helper.getCloseBtnPosition(model.attributes.originShape)
                         })
                     ]
                 }));

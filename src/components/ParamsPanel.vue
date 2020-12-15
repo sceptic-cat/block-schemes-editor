@@ -29,6 +29,11 @@
     import SetTimeout from "./ToolParams/SetTimeout";
     import SetVariableValue from "./ToolParams/SetVariableValue";
     import VerifyRegularExpression from "./ToolParams/VerifyRegularExpression";
+    import Queue from "./ToolParams/Queue";
+    import SetCallPriority from "./ToolParams/SetCallPriority";
+    import SetCallParameter from "./ToolParams/SetCallParameter";
+    import ExternalTransfer from "./ToolParams/ExternalTransfer";
+    import Transfer from "./ToolParams/Transfer";
 
     export default {
         name: "ParamsPanel",
@@ -48,7 +53,12 @@
             IsTimeBetween,
             SetTimeout,
             SetVariableValue,
-            VerifyRegularExpression
+            VerifyRegularExpression,
+            Queue,
+            SetCallPriority,
+            SetCallParameter,
+            ExternalTransfer,
+            Transfer
         },
         computed: {
             //Получаем название модуля для подгрузки

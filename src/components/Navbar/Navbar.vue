@@ -1,6 +1,7 @@
 <template>
     <div>
         <Messages />
+        <Variables />
         <b-navbar toggleable="lg" type="dark" variant="dark">
             <b-navbar-brand href="/">Asterisk Dialplan</b-navbar-brand>
 
@@ -17,6 +18,12 @@
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог</b-dropdown-item>
+                    </b-nav-item-dropdown>
+                    <b-nav-item-dropdown>
+                        <template #button-content>
+                            <em>Помощь</em>
+                        </template>
+                        <b-dropdown-item href="#" @click="showVariables">Глобальные переменные</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
 
@@ -52,11 +59,13 @@
 <script>
     import { mapGetters, mapActions } from "vuex";
     import Messages from "../Modal/Messages";
+    import Variables from "../Modal/Variables";
 
     export default {
         name: "Navbar",
         components: {
-            Messages
+            Messages,
+            Variables
         },
         methods: {
             ...mapGetters(["getGraph"]),
@@ -183,6 +192,12 @@
             },
             exportToLog(){
                 console.log(this.getGraph().toJSON());
+            },
+            /**
+             * Показываем модалку со списком глобальных переменных
+             */
+            showVariables(){
+                this.$bvModal.show('modal-variables');
             }
         }
     }
