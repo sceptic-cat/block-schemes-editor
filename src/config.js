@@ -10,6 +10,7 @@ export default {
             queues: 'rgb(164,204,86)',
             callParams: '#4f77cc',
             groupLabel: 'rgba(31,0,146,0.22)',
+            input: 'rgb(142,31,0)',
         }
     }
 

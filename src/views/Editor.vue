@@ -50,7 +50,7 @@
     import SetCallParameter from "../tools/SetCallParameter";
     import ExternalTransfer from "../tools/ExternalTransfer";
     import Transfer from "../tools/Transfer";
-  //  import GetEvent from "../tools/GetEvent";
+    import Read from "../tools/Read";
     //import TextBlock from "../tools/Text";
     import GroupLabel from "../tools/GroupLabel";
 
@@ -161,9 +161,7 @@
             setupTools(graph){
                 const cells = [
                     GroupLabel.create(this.$joint, 'Дата и время'),
-
                     GetCurrentTime.create(this.$joint),
-               //     GetEvent.create(this.$joint),
                     GetMonthDay.create(this.$joint),
                     GetWeekDay.create(this.$joint),
                     IsTimeBetween.create(this.$joint),
@@ -177,6 +175,8 @@
                     GroupLabel.create(this.$joint, 'Перенаправления'),
                     ExternalTransfer.create(this.$joint),
                     Transfer.create(this.$joint),
+                    GroupLabel.create(this.$joint, 'Пользовательский \n ввод'),
+                    Read.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Проигрывание \n звуков'),
                     Background.create(this.$joint),
                     Playback.create(this.$joint),
@@ -237,6 +237,14 @@
                             }
                             if (cell.attributes.originShape != 'circle' && prev.originShape == 'groupLabel') {
                                 y -= marginTop;
+                            }
+
+                            if (cell.attributes.originShape == 'input' && prev.originShape == 'groupLabel') {
+                                y -= 200;
+                            }
+
+                            if (cell.attributes.originShape == 'groupLabel' && prev.originShape == 'input') {
+                                y += 190;
                             }
                         }
                     }
