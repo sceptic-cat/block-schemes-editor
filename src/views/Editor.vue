@@ -12,7 +12,7 @@
                 </div>
             </div>
             <div class="flex-item-15 blue h-100">
-                <ParamsPanel :tool="currentTool" />
+                <ParamsPanel :tool="currentTool" :key="currentTool.id" />
             </div>
         </div>
     </div>
@@ -31,6 +31,7 @@
     import Background from "../tools/Background";
     import PlaySilence from "../tools/PlaySilence";
     import SayNumber from "../tools/SayNumber";
+    import SayDigits from "../tools/SayDigits";
     import CheckCondition from "../tools/CheckCondition";
     import CountActiveCalls from "../tools/CountActiveCalls";
     import ExecuteScript from "../tools/ExecuteScript";
@@ -49,6 +50,7 @@
     import SetCallParameter from "../tools/SetCallParameter";
     import ExternalTransfer from "../tools/ExternalTransfer";
     import Transfer from "../tools/Transfer";
+  //  import GetEvent from "../tools/GetEvent";
     //import TextBlock from "../tools/Text";
     import GroupLabel from "../tools/GroupLabel";
 
@@ -59,7 +61,8 @@
             return {
                 currentTool: {
                     id: '',
-                    type: ''
+                    type: '',
+                    data: null
                 }
             };
         },
@@ -158,7 +161,9 @@
             setupTools(graph){
                 const cells = [
                     GroupLabel.create(this.$joint, 'Дата и время'),
+
                     GetCurrentTime.create(this.$joint),
+               //     GetEvent.create(this.$joint),
                     GetMonthDay.create(this.$joint),
                     GetWeekDay.create(this.$joint),
                     IsTimeBetween.create(this.$joint),
@@ -177,6 +182,7 @@
                     Playback.create(this.$joint),
                     PlaySilence.create(this.$joint),
                     SayNumber.create(this.$joint),
+                    SayDigits.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Системные \n функции'),
                     Start.create(this.$joint),
                     CheckCondition.create(this.$joint),
@@ -271,6 +277,13 @@
                 return true;
             },
             /*eslint-enable */
+            /**
+             * Перетаскиваем элементы с панели инструментов в рабочую область
+             * @param cellView
+             * @param e
+             * @param x
+             * @param y
+             */
             dragAndDrop(cellView, e, x, y) {
                 let body = $('body');
                 body.append('<div id="flyPaper" style="position:fixed;z-index:100;opacity:.6;pointer-event:none; background-color:rgba(0, 0, 0, 0.0);"></div>');
@@ -287,7 +300,7 @@
                         y: y - pos.y
                     };
 
-                flyShape.position(0, 0);
+                flyShape.position(0, 40);
                 flyGraph.addCell(flyShape);
                 $("#flyPaper").offset({
                     left: e.pageX - offset.x,
@@ -309,7 +322,7 @@
                     // Dropped over paper ?
                     if (x > target.left && x < target.left + paper.width() && y > target.top && y < target.top + paper.height()) {
                         let s = flyShape.clone();
-                        s.position(x - target.left - offset.x, y - target.top - offset.y);
+                        s.position(x - target.left - offset.x, y - target.top - offset.y + 40);
                         this.getGraph().addCell(s);
                         s.trigger('cell:pointerclick');
                     }
@@ -333,6 +346,7 @@
                 }));
             },
             onBlockClick(cellView){
+                console.log('CLICK_NAHYI', cellView);
                 if (cellView.model.attributes.type !== 'link') {
                     this.currentTool = {
                         id: cellView.model.id,

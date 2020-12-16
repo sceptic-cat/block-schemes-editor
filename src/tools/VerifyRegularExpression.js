@@ -12,7 +12,8 @@ export default {
                     }
                 },
                 data: {
-                    expression: ''
+                    expression: '',
+                    value: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
@@ -30,6 +31,10 @@ export default {
                     }
                     if (this.data.expression === '') {
                         messages.push('Не указано имя переменной в элементе ' + this.attrs['.label'].text);
+                        result = false;
+                    }
+                    if (this.data.value === '') {
+                        messages.push('Не указано значение, которое проверяем регулярным выражением в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {

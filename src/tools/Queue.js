@@ -1,5 +1,5 @@
 import validation from "./utils/validation";
-//import config from "@/config";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
@@ -8,7 +8,10 @@ export default {
                 type: 'devs.QueueModel',
                 attrs: {
                     '.label': {
-                        text: 'Send To \n Queue',
+                        text: 'Queue',
+                    },
+                    '.body': {
+                        fill: config.colours.blocks.queues
                     }
                 },
                 data: {

@@ -1,4 +1,5 @@
 import validation from "./utils/validation";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
@@ -8,6 +9,9 @@ export default {
                 attrs: {
                     '.label': {
                         text: 'Transfer',
+                    },
+                    '.body': {
+                        fill: config.colours.blocks.transfers
                     }
                 },
                 data: {
@@ -22,6 +26,10 @@ export default {
                     let linkFound = validation.findLink(links, this.id, "ok");
                     if (!linkFound) {
                         messages.push('Не указана исходящая ссылка (ok) для элемента ' + this.attrs['.label'].text);
+                        result = false;
+                    }
+                    if (this.data.number === '') {
+                        messages.push('Не указан номер для перевода в элементе ' + this.attrs['.label'].text);
                         result = false;
                     }
                     if (this.data.name === '') {

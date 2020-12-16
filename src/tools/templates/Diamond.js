@@ -12,7 +12,7 @@ export default {
                 originShape: 'diamond', //кастомное свойство, дабы можно было определить родителя при наследовании
                 attrs: {
                     '.body': {
-                        d: 'M 30 0 L 60 30 30 60 0 30 z',
+                        d: 'M 40 10 L 20 20 L 0 10 L 20 0 z',
                         fill: config.colours.blocks.default
                     },
                     '.label': {

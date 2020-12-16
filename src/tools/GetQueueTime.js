@@ -1,4 +1,5 @@
 import validation from "./utils/validation";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
@@ -8,6 +9,9 @@ export default {
                 attrs: {
                     '.label': {
                         text: 'Get Queue \n Time',
+                    },
+                    '.body': {
+                        fill: config.colours.blocks.queues
                     }
                 },
                 data: {},

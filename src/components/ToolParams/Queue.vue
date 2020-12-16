@@ -27,7 +27,7 @@
         data() {
             return {
                 form: {
-                    queue: this.data.queue
+                    name: this.data.name
                 }
             }
         }

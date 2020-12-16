@@ -11,6 +11,20 @@
             ></b-form-input>
         </b-form-group>
 
+        <b-form-group
+                id="verify-regular-expression-value-group"
+                label="Значение:"
+                label-for="verify-regular-expression-value"
+        >
+            <b-form-input
+                    id="verify-regular-expression-value"
+                    v-model="form.value"
+            ></b-form-input>
+            <b-form-text id="queue-name-help">
+                <p>Значение, которое проверяем на регулярное выражение. Может быть переменной или выражение, например: ${CALLERID(num)}</p>
+            </b-form-text>
+        </b-form-group>
+
     </div>
 </template>
 
@@ -22,7 +36,8 @@
         data() {
             return {
                 form: {
-                    expression: this.data.expression
+                    expression: this.data.expression,
+                    value: this.data.value
                 }
             }
         }

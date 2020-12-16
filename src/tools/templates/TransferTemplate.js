@@ -3,12 +3,13 @@ import config from "@/config";
 export default {
     load(joint){
         joint.shapes.devs.TransferTemplateModel = joint.shapes.devs.Model.extend({
-
+            // markup: '<g class="rotatable"><g class="scalable"><path class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
             defaults: joint.util.deepSupplement({
                 type: 'devs.TransferTemplateModel',
                 originShape: 'rectangle', //кастомное свойство, дабы можно было определить родителя при наследовании
                 attrs: {
                     '.body': {
+                  //      d: 'M 40 10 L 20 20 L 0 10 L 20 0 z',
                         fill: config.colours.blocks.default
                     },
                     '.label': {

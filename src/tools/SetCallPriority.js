@@ -1,5 +1,5 @@
 import validation from "./utils/validation";
-//import config from "@/config";
+import config from "@/config";
 
 export default {
     create(joint, x = 0, y = 0){
@@ -9,6 +9,9 @@ export default {
                 attrs: {
                     '.label': {
                         text: 'Set Call \n Priority',
+                    },
+                    '.body': {
+                        fill: config.colours.blocks.queues
                     }
                 },
                 data: {

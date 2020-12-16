@@ -8,6 +8,8 @@ export default {
             state.graphLoaded = true;
         },
         updateCell(state, data) {
+            console.log('[data.id]', data.id);
+            console.log('[CELL]', state.graph.getCell(data.id));
             state.graph.getCell(data.id).set({ data: data.form });
         }
     },
