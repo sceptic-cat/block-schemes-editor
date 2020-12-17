@@ -12,7 +12,9 @@
                 </div>
             </div>
             <div class="flex-item-15 blue h-100">
-                <ParamsPanel :tool="currentTool" :key="currentTool.id" />
+                <div id="params-panel-container">
+                    <ParamsPanel :tool="currentTool" :key="currentTool.id" />
+                </div>
             </div>
         </div>
     </div>
@@ -152,11 +154,17 @@
             //Добавляем возможность перетаскивания элементов из панели инструментов на основную схему
             this.stenchil.on('cell:pointerdown', this.dragAndDrop);
 
+            let scheme = this.getScheme();
+            console.log('scheme', scheme);
+            if (scheme) {
+                this.getGraph().fromJSON(JSON.parse(this.getScheme()));
+                this.setScheme(null);
+            }
            // this.$emit('init', this.getGraph());
         },
         methods: {
-            ...mapActions(["setGraph"]),
-            ...mapGetters(["getGraph"]),
+            ...mapActions(["setGraph", "setScheme"]),
+            ...mapGetters(["getGraph", "getScheme"]),
             //Подгружаем инструменты в
             setupTools(graph){
                 const cells = [
@@ -404,6 +412,12 @@
         overflow-y: scroll;
         width: 160px;
         height: 90vh;
+    }
+
+    #params-panel-container {
+        height: 90vh;
+        overflow-y: scroll;
+        padding: 0 5px;
     }
 
     /* width */

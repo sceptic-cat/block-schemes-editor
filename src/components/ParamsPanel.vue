@@ -83,7 +83,4 @@
 </script>
 
 <style scoped>
-    #param-panel {
-        padding-left: 5px;
-    }
 </style>

@@ -14,7 +14,7 @@
                         <template #button-content>
                             <em>Схема</em>
                         </template>
-                        <b-dropdown-item to="/editor">Новая</b-dropdown-item>
+                        <b-dropdown-item to="/editor" :key="$route.fullPath">Новая</b-dropdown-item>
                         <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
@@ -69,8 +69,8 @@
             Variables
         },
         methods: {
-            ...mapGetters(["getGraph"]),
-            ...mapActions(["updateMessages"]),
+            ...mapGetters(["getGraph", "getScheme"]),
+            ...mapActions(["updateMessages", "setScheme"]),
             /**
              * Сохраняем схему на сервере
              */
@@ -179,7 +179,10 @@
                         return response.json();
                     }).then((resp) => {
                         console.log(resp);
-                        this.getGraph().fromJSON(JSON.parse(resp.data));
+                        this.setScheme(resp.data);
+
+                        this.$router.push({ name: 'Editor' });
+                       // this.getGraph().fromJSON(JSON.parse(resp.data));
                     });
                 } catch (e) {
                     console.error(e);
