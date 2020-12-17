@@ -34,6 +34,7 @@
     import SetCallParameter from "./ToolParams/SetCallParameter";
     import ExternalTransfer from "./ToolParams/ExternalTransfer";
     import Transfer from "./ToolParams/Transfer";
+    import Read from "./ToolParams/Read";
 
     export default {
         name: "ParamsPanel",
@@ -58,7 +59,8 @@
             SetCallPriority,
             SetCallParameter,
             ExternalTransfer,
-            Transfer
+            Transfer,
+            Read
         },
         computed: {
             //Получаем название модуля для подгрузки

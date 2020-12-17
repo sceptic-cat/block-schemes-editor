@@ -7,23 +7,28 @@ export default {
             defaults: joint.util.deepSupplement({
                 type: 'devs.ReadModel',
                 data: {
-                    file: '',
-                    option: 'skip'
+                    variable: 'USER_INPUT',
+                    filename: '',
+                    maxdigits: 1,
+                    attempts: '',
+                    timeout: 5,
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
                     let result = true;
                     let messages = [];
-                    let linkFound = validation.findLink(links, this.id, "1");
+                    let linkFound = validation.findLink(links, this.id, "ok");
                     if (!linkFound) {
-                        messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
+                        messages.push('Не указана исходящая ссылка для результата "ok" для элемента ' + this.attrs['.label'].text);
                         result = false;
                     }
                     return {
                         result: result,
                         messages: messages
                     };
-                }
+                },
+                inPorts: ['in'],
+                outPorts: ['ok', 'time', 'hang', 'err']
             }, joint.shapes.devs.InputModel.prototype.defaults)
         });
 

@@ -14,6 +14,7 @@
                         <template #button-content>
                             <em>Схема</em>
                         </template>
+                        <b-dropdown-item to="/editor">Новая</b-dropdown-item>
                         <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>

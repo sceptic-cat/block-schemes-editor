@@ -10,7 +10,7 @@ export default {
                     '.label': {
                         text: 'Input',
                         'font-size': 15,
-                        'ref-y': 120,
+                        'ref-y': 75,
                         'y-alignment': 'middle'
                     },
                     '.body': {
@@ -18,8 +18,8 @@ export default {
                     }
                 },
                 size: {
-                    width: 80,
-                    height: 250
+                    width: 50,
+                    height: 150
                 },
                 ports: {
                     groups: {
@@ -62,8 +62,8 @@ export default {
                         }
                     }
                 },
-                inPorts: ['in'],
-                outPorts: ['1', '2',  '3', '4', '5', '6', '7', '8', '9', '0', 'L', '*', '#', '!']
+               // inPorts: ['in'],
+               // outPorts: ['1', '2',  '3', '4', '5', '6', '7', '8', '9', '0', 'L', '*', '#', '!']
             }, joint.shapes.devs.Model.prototype.defaults)
         });
 

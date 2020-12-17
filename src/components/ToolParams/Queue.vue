@@ -22,7 +22,7 @@
 <script>
     import baseTool from './mixins/baseTool'
     export default {
-        name: "Playback",
+        name: "Queue",
         mixins: [ baseTool ],
         data() {
             return {

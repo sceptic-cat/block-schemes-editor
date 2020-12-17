@@ -240,11 +240,11 @@
                             }
 
                             if (cell.attributes.originShape == 'input' && prev.originShape == 'groupLabel') {
-                                y -= 200;
+                                y -= 100;
                             }
 
                             if (cell.attributes.originShape == 'groupLabel' && prev.originShape == 'input') {
-                                y += 190;
+                                y += 90;
                             }
                         }
                     }
