@@ -14,7 +14,7 @@
                         <template #button-content>
                             <em>Схема</em>
                         </template>
-                        <b-dropdown-item to="/editor" :key="$route.fullPath">Новая</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="createNew">Новая</b-dropdown-item>
                         <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
@@ -69,11 +69,19 @@
             Variables
         },
         methods: {
-            ...mapGetters(["getGraph", "getScheme"]),
-            ...mapActions(["updateMessages", "setScheme"]),
+            ...mapGetters(["getGraph"]),
+            ...mapActions(["updateMessages"]),
             /**
              * Сохраняем схему на сервере
              */
+            createNew() {
+                if (this.$route.name == 'Editor') {
+                    // console.log('[CUR ROUT]', this.$router.currentRoute);
+                    this.$router.go(this.$router.currentRoute);
+                } else {
+                    this.$router.push({ name: 'Editor' });
+                }
+            },
             async save(){
                 //Валидируем схему
                 const allElem = this.getGraph().getElements();
@@ -178,11 +186,17 @@
                     }).then((response) => {
                         return response.json();
                     }).then((resp) => {
-                        console.log(resp);
-                        this.setScheme(resp.data);
+                       // console.log(resp);
+                       // this.setScheme(resp.data);
+                        localStorage.setItem('scheme', resp.data);
 
-                        this.$router.push({ name: 'Editor' });
-                       // this.getGraph().fromJSON(JSON.parse(resp.data));
+                        if (this.$route.name == 'Editor') {
+                            this.$router.go(this.$router.currentRoute);
+                        } else {
+                            this.$router.push({ name: 'Editor' });
+                        }
+
+                        // this.getGraph().fromJSON(JSON.parse(resp.data));
                     });
                 } catch (e) {
                     console.error(e);

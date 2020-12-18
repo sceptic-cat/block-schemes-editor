@@ -24,6 +24,7 @@
     import { mapGetters, mapActions } from "vuex";
     import ParamsPanel from "../components/ParamsPanel";
     import $ from 'jquery';  //Ну сорян... пока так...
+    //import scrollBy from 'jquery.scrollby';
     //templatesLoader импортировать прежде остальных инструментов, ибо тут грузятся шаблоны фигур для большинства инструментов
     import templatesLoader from "../tools/utils/templatesLoader";
     import helper from "../tools/utils/helper";
@@ -154,17 +155,28 @@
             //Добавляем возможность перетаскивания элементов из панели инструментов на основную схему
             this.stenchil.on('cell:pointerdown', this.dragAndDrop);
 
-            let scheme = this.getScheme();
-            console.log('scheme', scheme);
+            //Если в localStorage есть данные, значит мы были перенаправлены на страницу после импорта. Загружаем импортированные данные
+            let scheme = localStorage.getItem('scheme');
+            console.log(scheme);
             if (scheme) {
-                this.getGraph().fromJSON(JSON.parse(this.getScheme()));
-                this.setScheme(null);
+                this.getGraph().fromJSON(JSON.parse(scheme));
+                localStorage.setItem('scheme', '');
+            } else {
+                const startCells = [
+                    Start.create(this.$joint, 3700, 3600)
+                ];
+                this.getGraph().addCells(startCells);
             }
-           // this.$emit('init', this.getGraph());
+
+            //Скроллируем схему приблизительно к центру
+            const paperContainer = document.getElementById('paper-container');
+            const cw = document.getElementById('paper-container').clientWidth;
+            paperContainer.scrollTop = 3700 - 200;
+            paperContainer.scrollLeft = 3600 - (cw / 2) + 160 - 30; //позиция скрола - половина видимой части схемы + панелька слева - половина стартового элемента
         },
         methods: {
-            ...mapActions(["setGraph", "setScheme"]),
-            ...mapGetters(["getGraph", "getScheme"]),
+            ...mapActions(["setGraph"]),
+            ...mapGetters(["getGraph"]),
             //Подгружаем инструменты в
             setupTools(graph){
                 const cells = [
@@ -192,7 +204,7 @@
                     SayNumber.create(this.$joint),
                     SayDigits.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Системные \n функции'),
-                    Start.create(this.$joint),
+                    //Start.create(this.$joint),
                     CheckCondition.create(this.$joint),
                     CountActiveCalls.create(this.$joint),
                     ExecuteScript.create(this.$joint),
@@ -222,7 +234,7 @@
                         //console.log(cell.attributes.type, offset, y);
                         if (prev) {
                             //TODO:: handle with problem elements and rid from this crutches
-                            //Костыли, потребовавшиеся из-за того, что мы повернули базовые элементы модели
+                            //Корректируем расположение нестандартных элементов
                             if ( cell.attributes.originShape == 'circle' && prev.originShape != 'circle' ) {
                                 y+= prevOutPortOffset * 2;
                             }
@@ -278,6 +290,7 @@
                 const source = linkView.model.attributes.source;
                 //const target = linkView.model.attributes.target;
                 let linkCnt = 0;
+                //console.log(paper.model.attributes.cells);
                 paper.model.attributes.cells.models.forEach((cell) => {
                     //Запрещаем делать несколько стрелок из одного out порта
                     if (cell.attributes.type === 'link' &&
@@ -362,7 +375,6 @@
                 }));
             },
             onBlockClick(cellView){
-                console.log('CLICK_NAHYI', cellView);
                 if (cellView.model.attributes.type !== 'link') {
                     this.currentTool = {
                         id: cellView.model.id,

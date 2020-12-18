@@ -1,7 +1,6 @@
 export default {
     state: {
-        graph: null,
-        scheme: null
+        graph: null
     },
     mutations: {
         updateGraph(state, graph) {
@@ -10,9 +9,6 @@ export default {
         },
         updateCell(state, data) {
             state.graph.getCell(data.id).set({ data: data.form });
-        },
-        updateScheme(state, scheme) {
-            state.scheme = scheme;
         }
     },
     actions: {
@@ -21,17 +17,11 @@ export default {
         },
         updateData({commit}, data) {
             commit('updateCell', data);
-        },
-        setScheme({commit}, scheme) {
-            commit('updateScheme', scheme);
         }
     },
     getters: {
         getGraph(state) {
             return state.graph;
-        },
-        getScheme(state) {
-            return state.scheme;
         }
     }
 }
