@@ -15,8 +15,8 @@
                             <em>Схема</em>
                         </template>
                         <b-dropdown-item href="#" @click="createNew">Новая</b-dropdown-item>
-                        <b-dropdown-item href="#" @click="parse">Преобразовать в код asterisk</b-dropdown-item>
-                        <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="parse" v-if="this.$route.name==='Editor'">Преобразовать в код asterisk</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="exportToJson" v-if="this.$route.name==='Editor'">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог</b-dropdown-item>
                     </b-nav-item-dropdown>
@@ -24,7 +24,7 @@
                         <template #button-content>
                             <em>Помощь</em>
                         </template>
-                        <b-dropdown-item href="#" @click="check">Проверить схему</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="check" v-if="this.$route.name==='Editor'">Проверить схему</b-dropdown-item>
                         <b-dropdown-item href="#" @click="showVariables">Глобальные переменные</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
@@ -62,9 +62,11 @@
     import { mapGetters, mapActions } from "vuex";
     import Messages from "../Modal/Messages";
     import Variables from "../Modal/Variables";
+    import modal from "../mixins/modal";
 
     export default {
         name: "Navbar",
+        mixins: [ modal ],
         components: {
             Messages,
             Variables
@@ -87,11 +89,7 @@
                 const valid = this.validate();
 
                 if (!valid.result) {
-                    this.updateMessages({
-                        title: 'Ошибка в схеме',
-                        message: valid.message
-                    });
-                    this.$bvModal.show('modal-message');
+                    this.showModal('Ошибка в схеме', valid.message);
                     return false;
                 }
 
@@ -120,29 +118,17 @@
                     });
                 } catch (e) {
                     console.error(e);
-                    this.updateMessages({
-                        title: 'Ошибка',
-                        message: e.name + ": " + e.message
-                    });
-                    this.$bvModal.show('modal-message');
+                    this.showModal('Ошибка', e.name + ": " + e.message);
                 }
             },
             check(){
                 const valid = this.validate();
 
                 if (!valid.result) {
-                    this.updateMessages({
-                        title: 'Ошибка в схеме',
-                        message: valid.message
-                    });
-
+                    this.showModal('Ошибка в схеме', valid.message);
                 } else {
-                    this.updateMessages({
-                        title: 'Проверка завершена',
-                        message: '<p class="text-success">Схема корректна</p>'
-                    });
+                    this.showModal('Проверка завершена', '<p class="text-success">Схема корректна</p>');
                 }
-                this.$bvModal.show('modal-message');
             },
             validate(){
                 //Валидируем схему
@@ -177,11 +163,7 @@
                 const valid = this.validate();
 
                 if (!valid.result) {
-                    this.updateMessages({
-                        title: 'Ошибка в схеме',
-                        message: valid.message
-                    });
-                    this.$bvModal.show('modal-message');
+                    this.showModal('Ошибка в схеме', valid.message);
                     return false;
                 }
 
@@ -199,19 +181,11 @@
                     }).then((response) => {
                         return response.json();
                     }).then((resp) => {
-                        this.updateMessages({
-                            title: resp.save ? 'Уведомление' : 'Ошибка',
-                            message: resp.message
-                        });
-                        this.$bvModal.show('modal-message');
+                        this.showModal(resp.save ? 'Уведомление' : 'Ошибка',  resp.message);
                     });
                 } catch (e) {
                     console.error(e);
-                    this.updateMessages({
-                        title: 'Ошибка',
-                        message: e.name + ": " + e.message
-                    });
-                    this.$bvModal.show('modal-message');
+                    this.showModal('Ошибка', e.name + ": " + e.message);
                 }
             },
             /**
@@ -261,8 +235,6 @@
                     }).then((response) => {
                         return response.json();
                     }).then((resp) => {
-                       // console.log(resp);
-                       // this.setScheme(resp.data);
                         localStorage.setItem('scheme', resp.data);
 
                         if (this.$route.name == 'Editor') {
@@ -270,16 +242,10 @@
                         } else {
                             this.$router.push({ name: 'Editor' });
                         }
-
-                        // this.getGraph().fromJSON(JSON.parse(resp.data));
                     });
                 } catch (e) {
                     console.error(e);
-                    this.$bvModal.show('modal-message');
-                    this.updateMessages({
-                        title: 'Ошибка',
-                        message: e.name + ": " + e.message
-                    })
+                    this.showModal('Ошибка', e.name + ": " + e.message);
                 }
 
             },
