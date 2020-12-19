@@ -1,36 +1,42 @@
 import validation from "./utils/validation";
 
 export default {
-    create(joint, x = 0, y = 0){
-        joint.shapes.devs.StartModel = joint.shapes.devs.CircleModel.extend({
-            defaults: joint.util.deepSupplement({
-                type: 'devs.StartModel',
-                attrs: {
-                    '.body': {
-                        fill: '#2ECC71'
+    init(joint){
+        if (!joint.shapes.devs.StartModel) {
+            joint.shapes.devs.StartModel = joint.shapes.devs.CircleModel.extend({
+                defaults: joint.util.deepSupplement({
+                    type: 'devs.StartModel',
+                    attrs: {
+                        '.body': {
+                            fill: '#2ECC71'
+                        },
+                        '.label': {
+                            text: 'START',
+                        }
                     },
-                    '.label': {
-                        text: 'START',
+                    data: {
+                        delay: 0
+                    },
+                    validate: function(graph) {
+                        const links = graph.getLinks();
+                        let messages = [];
+                        let linkFound = validation.findLink(links, this.id, "out");
+                        if (!linkFound) messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
+                        return {
+                            result: linkFound,
+                            messages: messages
+                        };
                     }
-                },
-                data: {
-                    delay: 0
-                },
-                validate: function(graph) {
-                    const links = graph.getLinks();
-                    let messages = [];
-                    let linkFound = validation.findLink(links, this.id, "out");
-                    if (!linkFound) messages.push('Не указана исходящая ссылка для элемента ' + this.attrs['.label'].text);
-                    return {
-                        result: linkFound,
-                        messages: messages
-                    };
-                }
-            }, joint.shapes.devs.CircleModel.prototype.defaults)
-        });
+                }, joint.shapes.devs.CircleModel.prototype.defaults)
+            });
 
-        joint.shapes.devs.StartModelView = joint.shapes.devs.CircleModelView;
+            joint.shapes.devs.StartModelView = joint.shapes.devs.CircleModelView;
+        }
 
+    },
+
+    create(joint, x = 0, y = 0){
+        this.init(joint);
         return new joint.shapes.devs.StartModel({
             position: {
                 x: x,

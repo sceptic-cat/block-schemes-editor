@@ -159,11 +159,16 @@
             let scheme = localStorage.getItem('scheme');
             console.log(scheme);
             if (scheme) {
-                this.getGraph().fromJSON(JSON.parse(scheme));
+                try {
+                    this.getGraph().fromJSON(JSON.parse(scheme));
+
+                } catch (e) {
+                    console.error(e)
+                }
                 localStorage.setItem('scheme', '');
             } else {
                 const startCells = [
-                    Start.create(this.$joint, 3700, 3600)
+                    Start.create(this.$joint, 3700, 200)
                 ];
                 this.getGraph().addCells(startCells);
             }
@@ -171,7 +176,7 @@
             //Скроллируем схему приблизительно к центру
             const paperContainer = document.getElementById('paper-container');
             const cw = document.getElementById('paper-container').clientWidth;
-            paperContainer.scrollTop = 3700 - 200;
+           // paperContainer.scrollTop = 3700 - 200;
             paperContainer.scrollLeft = 3600 - (cw / 2) + 160 - 30; //позиция скрола - половина видимой части схемы + панелька слева - половина стартового элемента
         },
         methods: {
@@ -179,6 +184,8 @@
             ...mapGetters(["getGraph"]),
             //Подгружаем инструменты в
             setupTools(graph){
+                Start.init(this.$joint);
+
                 const cells = [
                     GroupLabel.create(this.$joint, 'Дата и время'),
                     GetCurrentTime.create(this.$joint),
@@ -204,7 +211,7 @@
                     SayNumber.create(this.$joint),
                     SayDigits.create(this.$joint),
                     GroupLabel.create(this.$joint, 'Системные \n функции'),
-                    //Start.create(this.$joint),
+                   // Start.create(this.$joint),
                     CheckCondition.create(this.$joint),
                     CountActiveCalls.create(this.$joint),
                     ExecuteScript.create(this.$joint),
@@ -316,11 +323,12 @@
             dragAndDrop(cellView, e, x, y) {
                 let body = $('body');
                 body.append('<div id="flyPaper" style="position:fixed;z-index:100;opacity:.6;pointer-event:none; background-color:rgba(0, 0, 0, 0.0);"></div>');
-                let flyGraph = new this.$joint.dia.Graph;
+                let flyGraph = new this.$joint.dia.Graph //({}, { cellNamespace: this.$joint.shapes });
                 new this.$joint.dia.Paper({
                     el: $('#flyPaper'),
                     model: flyGraph,
-                    interactive: false
+                    interactive: false,
+                 //   cellViewNamespace: this.$joint.shapes,
                 });
                 let flyShape = cellView.model.clone(),
                     pos = cellView.model.position(),

@@ -16,6 +16,20 @@
             </b-form-text>
         </b-form-group>
 
+        <b-form-group
+                id="queue-music-group"
+                label="Музыка при ожидании:"
+                label-for="queue-music"
+        >
+            <b-form-input
+                    id="queue-music"
+                    v-model="form.music"
+            ></b-form-input>
+            <b-form-text id="queue-music-help">
+                <p>Необязательно. Используемый класс музыки при удержании (допустимые варианты прописаны в конфигурационном файле musiconhold). Если не указывать, будет использована музыка по умолчанию.</p>
+            </b-form-text>
+        </b-form-group>
+
     </div>
 </template>
 
@@ -27,7 +41,8 @@
         data() {
             return {
                 form: {
-                    name: this.data.name
+                    name: this.data.name,
+                    music: this.data.music
                 }
             }
         }

@@ -15,7 +15,8 @@ export default {
                     }
                 },
                 data: {
-                    name: ''
+                    name: '',
+                    music: ''
                 },
                 validate: function(graph) {
                     const links = graph.getLinks();
