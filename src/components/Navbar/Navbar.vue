@@ -15,7 +15,7 @@
                             <em>Схема</em>
                         </template>
                         <b-dropdown-item href="#" @click="createNew">Новая</b-dropdown-item>
-                        <b-dropdown-item href="#" @click="save">Сохранить</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="parse">Преобразовать в код asterisk</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог</b-dropdown-item>
@@ -24,6 +24,7 @@
                         <template #button-content>
                             <em>Помощь</em>
                         </template>
+                        <b-dropdown-item href="#" @click="check">Проверить схему</b-dropdown-item>
                         <b-dropdown-item href="#" @click="showVariables">Глобальные переменные</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
@@ -82,11 +83,73 @@
                     this.$router.push({ name: 'Editor' });
                 }
             },
-            async save(){
+            async parse(){
+                const valid = this.validate();
+
+                if (!valid.result) {
+                    this.updateMessages({
+                        title: 'Ошибка в схеме',
+                        message: valid.message
+                    });
+                    this.$bvModal.show('modal-message');
+                    return false;
+                }
+
+                let formData = new FormData();
+                formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
+                formData.append("extension", "397945");
+                formData.append("context", "call-out");
+
+                try {
+                    await fetch(this.$localConfig.parseServiceUrl, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }).then((response) => {
+                        return response.json();
+                    }).then((resp) => {
+                        console.log(resp);
+
+                        /*this.updateMessages({
+                            title: resp.save ? 'Уведомление' : 'Ошибка',
+                            message: resp.message
+                        });
+                        this.$bvModal.show('modal-message');*/
+                    });
+                } catch (e) {
+                    console.error(e);
+                    this.updateMessages({
+                        title: 'Ошибка',
+                        message: e.name + ": " + e.message
+                    });
+                    this.$bvModal.show('modal-message');
+                }
+            },
+            check(){
+                const valid = this.validate();
+
+                if (!valid.result) {
+                    this.updateMessages({
+                        title: 'Ошибка в схеме',
+                        message: valid.message
+                    });
+
+                } else {
+                    this.updateMessages({
+                        title: 'Проверка завершена',
+                        message: '<p class="text-success">Схема корректна</p>'
+                    });
+                }
+                this.$bvModal.show('modal-message');
+            },
+            validate(){
                 //Валидируем схему
                 const allElem = this.getGraph().getElements();
                 let isValid = true;
                 let messages = [];
+                let message = '';
                 allElem.forEach((elem) => {
                     if (elem.attributes.validate && typeof elem.attributes.validate == "function") {
                         let validation = elem.attributes.validate(this.getGraph());
@@ -97,14 +160,26 @@
                     }
                 });
                 if (!isValid) {
-                    let message = '<p><b>Схема собрана некорректно. Устраните следующие ошибки: </b></p><ol>';
+                    message += '<p><b>Схема собрана некорректно. Устраните следующие ошибки: </b></p><ol>';
                     messages.forEach(function(elem){
                         message += '<li>' + elem + '</li>';
                     });
                     message += '</ol>';
+
+                }
+
+                return {
+                    result: isValid,
+                    message: message
+                }
+            },
+            async save(){
+                const valid = this.validate();
+
+                if (!valid.result) {
                     this.updateMessages({
                         title: 'Ошибка в схеме',
-                        message: message
+                        message: valid.message
                     });
                     this.$bvModal.show('modal-message');
                     return false;
