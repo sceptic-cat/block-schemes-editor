@@ -2,6 +2,10 @@ export default {
     importServiceUrl: 'http://localhost/dialplan/web/index.php/editor-api/get-json',
     saveServiceUrl: 'http://localhost/dialplan/web/index.php/editor-api/save',
     parseServiceUrl: 'http://localhost/dialplan/web/index.php/editor-api/parse',
+    defaults: {
+        context: 'call-out',
+        extension: '397945',
+    },
     colours: {
         blocks: {
             datetime: '#d78f21',

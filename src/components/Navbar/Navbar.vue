@@ -1,9 +1,13 @@
 <template>
     <div>
         <Messages />
+        <ParseConfirm />
         <Variables />
         <b-navbar toggleable="lg" type="dark" variant="dark">
-            <b-navbar-brand href="/">Asterisk Dialplan</b-navbar-brand>
+            <b-navbar-brand href="/">
+                <img src="img/logo.png" class="d-inline-block align-top" alt="logo" width="30px">
+                Asterisk Dialplan
+            </b-navbar-brand>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -18,7 +22,7 @@
                         <b-dropdown-item href="#" @click="parse" v-if="this.$route.name==='Editor'">Преобразовать в код asterisk</b-dropdown-item>
                         <b-dropdown-item href="#" @click="exportToJson" v-if="this.$route.name==='Editor'">Экспорт в json</b-dropdown-item>
                         <b-dropdown-item href="#" @click="getJsonFile">Импорт из json</b-dropdown-item>
-                        <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог</b-dropdown-item>
+                        <b-dropdown-item href="#" @click="exportToLog">Экспорт в лог (dev)</b-dropdown-item>
                     </b-nav-item-dropdown>
                     <b-nav-item-dropdown>
                         <template #button-content>
@@ -39,14 +43,14 @@
                         <b-dropdown-item href="#">FA</b-dropdown-item>
                     </b-nav-item-dropdown>-->
 
-                    <b-nav-item-dropdown right>
-                        <!-- Using 'button-content' slot -->
+                    <!--<b-nav-item-dropdown right>
+                        &lt;!&ndash; Using 'button-content' slot &ndash;&gt;
                         <template #button-content>
                             <em>User</em>
                         </template>
                         <b-dropdown-item href="#">Profile</b-dropdown-item>
                         <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-                    </b-nav-item-dropdown>
+                    </b-nav-item-dropdown>-->
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
@@ -63,13 +67,21 @@
     import Messages from "../Modal/Messages";
     import Variables from "../Modal/Variables";
     import modal from "../mixins/modal";
+    import files from "../mixins/files";
+    import ParseConfirm from "../Modal/ParseConfirm";
 
     export default {
         name: "Navbar",
-        mixins: [ modal ],
+        mixins: [ modal, files ],
         components: {
+            ParseConfirm,
             Messages,
             Variables
+        },
+        mounted() {
+            this.$root.$on('component1', () => {
+                this.getJsonFile();
+            })
         },
         methods: {
             ...mapGetters(["getGraph"]),
@@ -92,34 +104,10 @@
                     this.showModal('Ошибка в схеме', valid.message);
                     return false;
                 }
+                this.$bvModal.show('modal-parse-confirm');
+                //ParseConfirm.methods.show();
+                //return;
 
-                let formData = new FormData();
-                formData.append("scheme", JSON.stringify( this.getGraph().toJSON() ));
-                formData.append("extension", "397945");
-                formData.append("context", "call-out");
-
-                try {
-                    await fetch(this.$localConfig.parseServiceUrl, {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    }).then((response) => {
-                        return response.json();
-                    }).then((resp) => {
-                        console.log(resp);
-
-                        /*this.updateMessages({
-                            title: resp.save ? 'Уведомление' : 'Ошибка',
-                            message: resp.message
-                        });
-                        this.$bvModal.show('modal-message');*/
-                    });
-                } catch (e) {
-                    console.error(e);
-                    this.showModal('Ошибка', e.name + ": " + e.message);
-                }
             },
             check(){
                 const valid = this.validate();
@@ -193,21 +181,7 @@
              */
             exportToJson(){
                 const json = JSON.stringify( this.getGraph().toJSON() );
-                const file = new Blob([json], {type: 'text/json'});
-                if (window.navigator.msSaveOrOpenBlob) // IE10+
-                    window.navigator.msSaveOrOpenBlob(file, 'asterisk_scheme.json');
-                else { // Others
-                    let a = document.createElement("a"),
-                        url = URL.createObjectURL(file);
-                    a.href = url;
-                    a.download = 'asterisk_scheme.json';
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(function() {
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(url);
-                    }, 0);
-                }
+                this.createFile('asterisk_scheme', json, 'text/json');
             },
             /**
              * Эмулируем нажатие кнопки загрузки файла на скрытой форме

@@ -82,7 +82,7 @@
                 cellViewNamespace: this.$joint.shapes,
                 model: this.getGraph(),
                 width: 8000,
-                height: 8000,
+                height: 10000,
                 gridSize: 14,
                 markAvailable: true,
                 interactive: true,
@@ -107,6 +107,10 @@
                 'element:mouseenter': this.showRemoveBtn,
                 'cell:mouseleave': (cellView) => { cellView.removeTools(); },
                 'cell:pointerclick': this.onBlockClick,
+                //TODO:: make tooltips
+                /*'cell:mouseenter': function (cellView) {
+                    console.log('[enter]', cellView)
+                }*/
 /*                'all': function(evt, x, y) {
                     console.log("All events", evt, x, y);
                 }*/
@@ -132,7 +136,7 @@
                 cellViewNamespace: this.$joint.shapes,
                 model: this.stenchilGraph,
                 width: 150,
-                height: 8000,
+                height: 2620,   //TODO:: make auto-calc
                 interactive: false,
                 markAvailable: true,
 /*                gridSize: 10,
@@ -256,7 +260,10 @@
                                 y += prevOutPortOffset * 2;
                             }
 
-                            if (cell.attributes.originShape == 'groupLabel' && (prev.originShape != 'circle')) {
+                            if (cell.attributes.originShape == 'groupLabel' && prev.originShape != 'circle') {
+                                y += marginTop;
+                            }
+                            if (cell.attributes.originShape == 'groupLabel' && prev.originShape == 'circle') {
                                 y += marginTop;
                             }
                             if (cell.attributes.originShape == 'circle' && prev.originShape == 'groupLabel') {

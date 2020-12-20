@@ -16,7 +16,7 @@ export default {
         },
         returnDefaultsForMessages({commit}){
             commit('mutateMessage', {
-                title: 'Уведомление',
+                title: '',
                 message: ''
             });
         }
